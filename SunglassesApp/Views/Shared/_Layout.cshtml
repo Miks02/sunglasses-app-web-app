@@ -3,14 +3,17 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Prodavnica Naočara</title>
+    <title>@ViewData["Title"] - Sunčane naočare</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SunglassesShop.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow bg-transparent position-absolute w-100">
+<body class="">
+    
+    
+    <div class="">
+        <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow bg-transparent fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">Sunčane naočare</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -38,7 +41,6 @@
             </div>
         </nav>
     </header>
-    <div class="main-wrapper">
         
         <main role="main" class="">
             @RenderBody()

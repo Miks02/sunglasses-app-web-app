@@ -6,11 +6,18 @@
 
 <section class="hero-section main ">
     <div class="heading text-center">
-        <h1 >Prodavnica naočara</h1>
+        <h1 >Prodavnica sunčanih naočara</h1>  
         <h4>Sunčane naočare za svaku priliku</h4>
+        @if(User.IsInRole("Admin"))
+        {
+            <h4>Admine legendoo</h4>
+        }
+        else {
+            <h4>Nisi admin</h4>
+        }
     </div>
     <div class="button-wrapper">
-        <button class="btn btn-primary">Katalog</button>
+        <button class="btn btn-primary shadow">Katalog</button>
     </div>
 </section>
 
