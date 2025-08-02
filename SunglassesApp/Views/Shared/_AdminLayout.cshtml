@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin panel</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SunglassesShop.styles.css" asp-append-version="true" />
+
+
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar shadow">
+            <div class="logo-wrapper">
+                <a href="#">Sunčane naočare</a>
+            </div>
+            <div class="line">
+                <hr>
+            </div>
+
+            <div class="sidebar-navigation">
+                <ul>
+                    <li><a asp-controller="Admin" asp-action="Index" class="sidebar-link">Admin panel</a></li>
+                    <li><a asp-controller="Admin" asp-action="ManageProducts" class="sidebar-link">Proizvodi</a></li>
+                    <li><a asp-asp-controller="Admin" class="sidebar-link">Dodaj proizvod</a></li>
+                    <li><a asp-asp-controller="Admin" class="sidebar-link">Promocije</a></li>
+                    <li><a asp-asp-controller="Admin" class="sidebar-link">Klijenti</a></li>
+                     <li><a asp-asp-controller="Admin" class="sidebar-link">Porudžbine</a></li>
+                    <li><a asp-asp-controller="Admin" class="sidebar-link">Podešavanja</a></li>
+                    <form asp-action="Index" asp-controller="Home">
+                        <li><button  class="sidebar-link text-light ">Izlaz</a></li>
+                    </form>
+                    <form asp-action="Logout" asp-controller="Account">
+                        <li><button  class="sidebar-link text-danger mt-5  ">Odjava</a></li>
+                    </form>
+                </ul>
+            </div>
+        </aside>
+        <div class="main-content">
+
+            <div class="dashboard-header  border-bottom">
+                <div class="heading">
+
+
+                </div>
+                <h4>@User.Identity?.Name</h4>
+
+                <i class="fa-solid fa-bars" id="menu-open"></i>
+            </div>
+
+            <div class="page-wrapper">
+                <main role="main">
+                    @RenderBody()
+
+                </main>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

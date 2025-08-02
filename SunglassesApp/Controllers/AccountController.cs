@@ -19,7 +19,12 @@ namespace SunglassesApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login() => View();
+        public IActionResult Login()
+        {
+            if (!_signInManager.IsSignedIn(User))
+                return View();
+            return RedirectToAction("Index", "Home");
+        }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -42,7 +47,12 @@ namespace SunglassesApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register() => View();
+        public IActionResult Register()
+        {
+            if (!_signInManager.IsSignedIn(User))
+                return View();
+            return RedirectToAction("Index", "Home");
+        }
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -66,7 +76,7 @@ namespace SunglassesApp.Controllers
 
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError(string.Empty, "Došlo je do greške prilikom registracije" + error.Description);
+                ModelState.AddModelError(string.Empty, "Došlo je do greške prilikom registracije");
             }
 
             return View(model);

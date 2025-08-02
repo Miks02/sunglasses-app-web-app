@@ -4,8 +4,12 @@
   margin: 0;
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
+  list-style-type: none;
 }
 
+.navbar {
+  min-height: 10vh;
+}
 .navbar a {
   font-weight: 650;
 }
@@ -33,7 +37,7 @@ body {
 
 .main-wrapper {
   flex: 1;
-  padding-bottom: 60px;
+  min-height: 80vh;
 }
 
 .hero-section {
@@ -55,7 +59,10 @@ body {
 }
 
 .hero-section.main {
-  min-height: 100vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .dark-gradient {
@@ -64,4 +71,88 @@ body {
 
 .text-danger {
   color: rgb(231, 9, 9) !important;
+}
+
+.bg-gray {
+  background-color: rgb(83, 82, 82);
+}
+
+.footer {
+  max-height: 20vh;
+}
+
+.position-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: rgb(122, 120, 120);
+}
+.dashboard-layout .sidebar {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  position: sticky;
+  min-height: 100vh;
+  width: 250px;
+  background-color: rgb(83, 82, 82);
+}
+.dashboard-layout .sidebar .logo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 1.2rem;
+}
+.dashboard-layout .sidebar .logo-wrapper a {
+  color: #0be0e7;
+  text-decoration: none;
+}
+.dashboard-layout .sidebar .sidebar-navigation ul {
+  padding: 0;
+}
+.dashboard-layout .sidebar .sidebar-navigation ul li .sidebar-link {
+  font-weight: 550;
+  text-decoration: none;
+  background: none;
+  border: none;
+  color: #eee;
+  display: block;
+  padding: 10px;
+  padding-left: 20px;
+  transition: 0.15s ease-in;
+}
+.dashboard-layout .sidebar .sidebar-navigation ul li .sidebar-link:hover {
+  opacity: 0.7;
+  background-color: rgb(61, 60, 60);
+}
+.dashboard-layout .sidebar .sidebar-navigation ul li button {
+  width: 100%;
+  text-align: left;
+}
+.dashboard-layout .main-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.dashboard-layout .main-content .dashboard-header {
+  padding: 10px;
+  font-size: 1rem;
+  width: 100%;
+  background-color: rgb(83, 82, 82);
+}
+.dashboard-layout .main-content .dashboard-header h4 {
+  text-align: right;
+  color: #0be0e7;
+}
+.dashboard-layout .main-content .page-wrapper {
+  padding: 20px;
+}
+.dashboard-layout .main-content .page-wrapper h1 {
+  text-align: center;
 }/*# sourceMappingURL=site.css.map */

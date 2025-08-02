@@ -12,6 +12,13 @@ namespace SunglassesApp.Data
 
         }
 
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Promotion> Promotions { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
