@@ -1,24 +1,27 @@
-﻿namespace SunglassesApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SunglassesApp.Models
 {
     public class Product
     {
         public int Id { get; set; }
 
-        public string Name { get; set; } = null!;
+        public string Model { get; set; } = null!;
         public string ImageUrl { get; set; } = null!;
-
-        public decimal Price { get; set; }
-
-        // Kategorije
-        public string FrameType { get; set; } = null!;
-        public string LensColor { get; set; } = null!;
-        public string FrameColor { get; set; } = null!;
-        public string Category { get; set; } = null!;
+        public string Name { get { return $"{Brand} {Model}"; } } 
+        public decimal? Price { get; set; }
+    
+        public FrameType? FrameType { get; set; } 
+        public LensColor? LensColor { get; set; } 
+        public FrameColor? FrameColor { get; set; } 
+        public Category? Category { get; set; } 
+        public UVProtection? UVProtection { get; set; } 
 
         public string Brand { get; set; } = null!;
-        public string UVProtection { get; set; } = null!;
+        public string? Description { get; set; }
 
-        // Akcije
+        public int TimesBought { get; set; } = 0;
+
         public int? PromotionId { get; set; }
         public Promotion? Promotion { get; set; }
 

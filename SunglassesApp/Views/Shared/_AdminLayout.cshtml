@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SunglassesShop.styles.css" asp-append-version="true" />
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 </head>
 
@@ -27,16 +27,17 @@
                 <ul>
                     <li><a asp-controller="Admin" asp-action="Index" class="sidebar-link">Admin panel</a></li>
                     <li><a asp-controller="Admin" asp-action="ManageProducts" class="sidebar-link">Proizvodi</a></li>
-                    <li><a asp-asp-controller="Admin" class="sidebar-link">Dodaj proizvod</a></li>
+                    <li><a asp-controller="Admin" asp-action="AddProduct" class="sidebar-link">Dodaj proizvod</a></li>
                     <li><a asp-asp-controller="Admin" class="sidebar-link">Promocije</a></li>
+                    <li><a asp-asp-controller="Admin" class="sidebar-link">Dodaj promociju</a></li>
                     <li><a asp-asp-controller="Admin" class="sidebar-link">Klijenti</a></li>
                      <li><a asp-asp-controller="Admin" class="sidebar-link">Porudžbine</a></li>
                     <li><a asp-asp-controller="Admin" class="sidebar-link">Podešavanja</a></li>
                     <form asp-action="Index" asp-controller="Home">
-                        <li><button  class="sidebar-link text-light ">Izlaz</a></li>
+                        <li><button  class="sidebar-link text-light ">Izlaz</button></li>
                     </form>
                     <form asp-action="Logout" asp-controller="Account">
-                        <li><button  class="sidebar-link text-danger mt-5  ">Odjava</a></li>
+                        <li><button  class="sidebar-link text-danger mt-5  ">Odjava</button></li>
                     </form>
                 </ul>
             </div>

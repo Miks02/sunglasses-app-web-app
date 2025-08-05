@@ -1,0 +1,137 @@
+﻿@using SunglassesApp.ViewModels
+@{
+    Layout = "_AdminLayout";
+    
+}
+
+
+@model ProductViewModel
+
+<div class="container-md ">
+    
+    @using (Html.BeginForm("AddProduct", "Product", FormMethod.Post, new
+    {
+        enctype = "multipart/form-data",
+        @class =
+        "needs-validation dark-gradient rounded-3 p-5 shadow ",
+        novalidate = "novalidate"
+    }))
+    {
+        <h1>Dodaj proizvod</h1>
+        @Html.AntiForgeryToken()
+
+        <div class="form-group-wrapper">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Model, new { @class = "form-label text-light" })
+                @Html.TextBoxFor(m => m.Model, new { @class = "form-control bg-secondary text-light shadow" })
+                @Html.ValidationMessageFor(m => m.Model, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Brand, "Brend", new { @class = "form-label text-light" })
+                @Html.TextBoxFor(m => m.Brand, new { @class = "form-control bg-secondary text-light shadow" })
+                @Html.ValidationMessageFor(m => m.Brand, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+       
+
+        <div class="form-group-wrapper">
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.ImageFile, "Slika", new { @class = "form-label text-light" })
+                <input type="file" name="ImageFile" class="form-control bg-secondary text-light shadow" />
+                @Html.ValidationMessageFor(m => m.ImageFile, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group-wrapper">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Price, "Cena", new { @class = "form-label text-light " })
+                @Html.TextBoxFor(m => m.Price, new { @class = "form-control bg-secondary text-light shadow", type =
+                "number", step = "0.01" })
+            @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group-wrapper">
+        <div class="form-group">
+            @Html.LabelFor(m => m.LensColor, "Boja stakala", new { @class = "form-label text-light" })
+            @Html.DropDownListFor(m => m.LensColor, Html.GetEnumSelectList<LensColor>(), "Izaberite...", new { @class =
+                        "form-control bg-secondary text-light shadow" })
+            @Html.ValidationMessageFor(m => m.LensColor, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.FrameColor, "Boja okvira", new { @class = "form-label text-light" })
+            @Html.DropDownListFor(m => m.FrameColor, Html.GetEnumSelectList<FrameColor>(), "Izaberite...", new { @class
+                        = "form-control bg-secondary text-light shadow" })
+            @Html.ValidationMessageFor(m => m.FrameColor, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group-wrapper">
+        <div class="form-group">
+            @Html.LabelFor(m => m.FrameType, "Oblik", new { @class = "form-label text-light" })
+            @Html.DropDownListFor(m => m.FrameType, Html.GetEnumSelectList<FrameType>(), "Izaberite...", new { @class =
+                        "form-control bg-secondary text-light shadow" })
+            @Html.ValidationMessageFor(m => m.FrameType, "", new { @class = "text-danger" })
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Category, "Kategorija", new { @class = "form-label text-light" })
+            @Html.DropDownListFor(m => m.Category, Html.GetEnumSelectList<Category>(), "Izaberite...", new { @class =
+                        "form-control bg-secondary text-light shadow" })
+            @Html.ValidationMessageFor(m => m.Category, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.UVProtection, "UV zaštita", new { @class = "form-label text-light" })
+            @Html.DropDownListFor(m => m.UVProtection, Html.GetEnumSelectList<UVProtection>(), "Izaberite...", new {
+                        @class
+                        = "form-control bg-secondary text-light shadow" })
+            @Html.ValidationMessageFor(m => m.UVProtection, "", new { @class = "text-danger" })
+        </div>
+
+    </div>
+
+
+
+    <div class="form-group-wrapper">
+        <div class="form-group mt-3 text-center">
+        @Html.LabelFor(m => m.Description, "Opis proizvoda", new { @class = "form-label text-light" })
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control bg-primary shadow text-light", rows = 2 })
+        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+    </div>
+    </div>
+
+    <div class="form-group-wrapper">
+        <div class="form-group">
+            @Html.LabelFor(m => m.PromotionId, "Promocija", new { @class = "form-label text-light" })
+            @Html.TextBoxFor(m => m.PromotionId, new { @class = "form-control bg-secondary text-light shadow" })
+            <!-- Ili dropdown ako imaš spisak promocija -->
+            @Html.ValidationMessageFor(m => m.PromotionId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center pt-4">
+        <button type="submit" class="btn btn-success shadow">Sačuvaj</button>
+    </div>
+        }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger mt-3">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+</div>

@@ -98,6 +98,7 @@ body {
   flex-direction: column;
   text-decoration: none;
   position: sticky;
+  top: 0%;
   min-height: 100vh;
   width: 250px;
   background-color: rgb(83, 82, 82);
@@ -132,7 +133,7 @@ body {
   background-color: rgb(61, 60, 60);
 }
 .dashboard-layout .sidebar .sidebar-navigation ul li button {
-  width: 100%;
+  width: 62%;
   text-align: left;
 }
 .dashboard-layout .main-content {
@@ -155,4 +156,20 @@ body {
 }
 .dashboard-layout .main-content .page-wrapper h1 {
   text-align: center;
+  color: #0be0e7;
+}
+.dashboard-layout form {
+  min-width: 400px;
+}
+.dashboard-layout .form-group-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 40px;
+  text-align: center;
+  flex-wrap: wrap;
+}
+.dashboard-layout .form-group-wrapper .form-group {
+  margin-top: 20px;
+  min-width: 25%;
 }/*# sourceMappingURL=site.css.map */

@@ -1,12 +1,25 @@
-
+@using SunglassesApp.Helpers;
 @{
     Layout = "_AdminLayout";
 }
+@model IEnumerable<SunglassesApp.Models.Product>
 
 <h1>Proizvodi</h1>
 
 <div class="container">
-    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger mt-3">
+            @TempData["ErrorMessage"]
+        </div>
+    }
         <div class="card mt-4 bg-gray">
             <div class="card-header  text-center text-light bg-gray">
                 <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Tabela svih proizvoda sa lagera</h5>
@@ -15,58 +28,45 @@
                 <div class="table-responsive  border-top rounded-top">
                     <table class="table table-hover table-secondary ">
                         <thead class="table-dark text-light">
-                            <tr>
-                                <th>#</th>
+                            <tr>                  
                                 <th>Proizvod</th>
-                                <th>Brend</th>
-                                <th>Prodatih komada</th>
-                                <th>Ukupna zarada</th>
+                                <th>Boja stakala</th>
+                                <th>Boja okvira</th>
+                                <th>Tip okvira</th>
+                                <th>Kategorija</th>
+                                <th>Cena</th>
                                 <th>Izmeni</th>
                                 <th>Obriši</th>
                             </tr>
                         </thead>
                         <tbody>
+                        @foreach(var p in Model)
+                        {
                             <tr>
-                                <td>1</td>
-                                <td>Ray-Ban Aviator</td>
-                                <td>Ray-Ban</td>
-                                <td>156</td>
-                                <td>1.245.600 RSD</td>
-                                <td><span class="badge bg-warning text-dark">4.7 <i class="fas fa-delete"></i></span></td>
+                                <td>@p.Name</td>
+                                <td>@p.LensColor?.GetDisplayName()</td>
+                                <td>@p.FrameColor?.GetDisplayName()</td>
+                                <td>@p.FrameType?.GetDisplayName()</td>
+                                <td>@p.Category?.GetDisplayName()</td>
+                                
+                                <td>@p.Price RSD</td>
+                                <td>
+                                    <form asp-action="EditProduct" asp-controller="Product" asp-route-id="@p.Id" method="post" class="d-inline">
+                                        <button type="submit" class="border-0 bg-transparent p-0">
+                                            <i class="bi bi-pencil text-success fw-bolder p-2 " style="font-size: 1.2rem"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form asp-action="DeleteProduct" asp-controller="Product" asp-route-id="@p.Id" method="post" class="d-inline">
+                                        <button type="submit" class="border-0 bg-transparent p-0">
+                                            <i class="bi bi-trash text-danger fw-bolder p-2" style="font-size: 1.2rem"></i>
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Oakley Holbrook</td>
-                                <td>Oakley</td>
-                                <td>128</td>
-                                <td>987.200 RSD</td>
-                                <td><span class="badge bg-warning text-dark">4.5 <i class="fas fa-star"></i></span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Ray-Ban Aviator</td>
-                                <td>Ray-Ban</td>
-                                <td>156</td>
-                                <td>1.245.600 RSD</td>
-                                <td><span class="badge bg-warning text-dark">4.7 <i class="fas fa-star"></i></span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Ray-Ban Aviator</td>
-                                <td>Ray-Ban</td>
-                                <td>156</td>
-                                <td>1.245.600 RSD</td>
-                                <td><span class="badge bg-warning text-dark">4.7 <i class="fas fa-star"></i></span></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Ray-Ban Aviator</td>
-                                <td>Ray-Ban</td>
-                                <td>156</td>
-                                <td>1.245.600 RSD</td>
-                                <td><span class="badge bg-warning text-dark">4.7 <i class="fas fa-star"></i></span></td>
-                            </tr>
-                        
+                        }
+
                         </tbody>
                         
                     </table>

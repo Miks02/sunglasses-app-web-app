@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SunglassesApp.Data;
+using SunglassesApp.Data.Repositories.Interfaces;
 using SunglassesApp.Models;
+using SunglassesApp.Data.Repositories.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 0;
 }).AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
