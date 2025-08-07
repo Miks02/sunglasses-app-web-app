@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using SunglassesApp.Data.Repositories.Implementations;
 using SunglassesApp.Data.Repositories.Interfaces;
 using SunglassesApp.Helpers;
 using SunglassesApp.Models;
@@ -24,11 +27,27 @@ namespace SunglassesApp.Controllers
             _productRepository = productRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, int page = 1)
         {
-            var promotions = await _promotionRepository.GetAll();
+            int pageSize = 10;
 
-            return View("ManagePromotions",promotions);
+            var promotions = _promotionRepository.GetAll();
+
+            
+
+            promotions = sortOrder switch
+            {
+                "discount_desc" => promotions.OrderByDescending(p => p.DiscountPercentage),
+                "discount_asc" => promotions.OrderBy(p => p.DiscountPercentage),
+                "default" => promotions.OrderByDescending(p => p.Id),
+                _ => promotions.OrderBy(p => p.Id),
+            };
+
+            ViewBag.CurrentSort = sortOrder;
+  
+            var paginatedPromotions = await PaginatedList<Promotion>.CreateAsync(promotions, page, pageSize);
+
+            return View("ManagePromotions", paginatedPromotions);
         }
 
         [HttpGet]
@@ -92,8 +111,6 @@ namespace SunglassesApp.Controllers
                 TempData["ErrorMessage"] = "Došlo je do greške prilikom brisanja promocije";
                 return RedirectToAction("Index");
             }
-
-            
 
         }
 

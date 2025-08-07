@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SunglassesApp.Helpers;
+using Microsoft.EntityFrameworkCore;
+using AspNetCoreGeneratedDocument;
 
 namespace SunglassesApp.Controllers
 {
@@ -29,26 +31,48 @@ namespace SunglassesApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-        [HttpGet]
-        public async Task<IActionResult> ManageProducts()
-        {
-            var products = await _productRepoistory.GetAll();
+            var products =  _productRepoistory.GetAll();
+
+            var productList = await products.ToListAsync();
 
             return View(products);
         }
-        [HttpGet]
 
+        [HttpGet]
+        public async Task<IActionResult> ManageProducts(string sortOrder, int page = 1)
+        {
+            int pageSize = 10; 
+
+            var products = _productRepoistory.GetAll();
+
+        
+            products = sortOrder switch
+            {
+                "price_desc" => products.OrderByDescending(p => p.Price),
+                "price_asc" => products.OrderBy(p => p.Price),
+                "times_bought" => products.OrderByDescending(p => p.TimesBought),
+                _ => products.OrderBy(p => p.Id),
+            };
+
+            ViewBag.CurrentSort = sortOrder;
+
+            var paginatedProducts = await PaginatedList<Product>.CreateAsync(products, page, pageSize);
+
+            return View(paginatedProducts);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> ProductForm()
         {
-            var promotions = await _promotionRepository.GetAll();
+            var promotions =  _promotionRepository.GetAll();
+
+            var promotionList = await promotions.ToListAsync();
 
             var viewModel = new ProductViewModel
             {
-                PromotionsList = promotions.Select(p => new SelectListItem
+                PromotionsList = promotionList.Select(p => new SelectListItem
                 {
                     Value = p.Id.ToString(),
                     Text = p.Name,
@@ -65,7 +89,9 @@ namespace SunglassesApp.Controllers
             var product = await _productRepoistory.Get(id);
             if (product != null)
             {
-                var promotions = await _promotionRepository.GetAll();
+                var promotions = _promotionRepository.GetAll();
+
+                var promotionList = await promotions.ToListAsync();
 
                 var updatedProduct = new ProductViewModel
                 {
@@ -79,12 +105,13 @@ namespace SunglassesApp.Controllers
                     Category = product.Category,
                     UVProtection = product.UVProtection,
                     Description = product.Description,
+                    Gender = product.Gender,
                     PromotionId = product.PromotionId,
                     ImageUrl = product.ImageUrl,
                     IsEdit = true,
 
 
-                    PromotionsList = Helper.LoadPromotions(promotions)
+                    PromotionsList = Helper.LoadPromotions(promotionList)
                 };
               
                 _logger.LogInformation("Funkcija je uspela");
@@ -97,7 +124,9 @@ namespace SunglassesApp.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveProduct(ProductViewModel product)
         {
-            var promotions = await _promotionRepository.GetAll();
+            var promotions =  _promotionRepository.GetAll();
+
+            var promotionList = await promotions.ToListAsync();
 
             if (!ModelState.IsValid)
             {
@@ -132,6 +161,7 @@ namespace SunglassesApp.Controllers
                 Category = product.Category,
                 UVProtection = product.UVProtection,
                 Description = product.Description,
+                Gender = product.Gender,
                 ImageUrl = "/images/" + uniqueFileName,
                 PromotionId = product.PromotionId
             };
@@ -158,11 +188,13 @@ namespace SunglassesApp.Controllers
         {
             if(!ModelState.IsValid)
             {
-                var promotions = await _promotionRepository.GetAll();
+                var promotions = _promotionRepository.GetAll();
+
+                var promotionList = await promotions.ToListAsync();
 
                 var viewModel = new ProductViewModel
                 {
-                    PromotionsList = Helper.LoadPromotions(promotions)
+                    PromotionsList = Helper.LoadPromotions(promotionList)
                 };
 
                 Helper.LogModelErrors(ModelState, _logger, "Uneti podaci nisu validni");
@@ -193,8 +225,8 @@ namespace SunglassesApp.Controllers
                     Category = product.Category,
                     UVProtection = product.UVProtection,
                     Description = product.Description,
-                    PromotionId = product.PromotionId
-                
+                    PromotionId = product.PromotionId,
+                    Gender = product.Gender
                 };
                 try
                 {
@@ -210,10 +242,10 @@ namespace SunglassesApp.Controllers
                     TempData["ErrorMessage"] = "Došlo je do greške prilikom dodavanja proizvoda";
                     ModelState.AddModelError(string.Empty, "Došlo je do greške prilikom dodavanja proizvoda");
 
-                    var promotions = await _promotionRepository.GetAll();
+                    var promotions = _promotionRepository.GetAll();
+                    var promotionList = await promotions.ToListAsync();
 
-
-                    product.PromotionsList = Helper.LoadPromotions(promotions);
+                    product.PromotionsList = Helper.LoadPromotions(promotionList);
 
                     return View("ProductForm", product);
                 }

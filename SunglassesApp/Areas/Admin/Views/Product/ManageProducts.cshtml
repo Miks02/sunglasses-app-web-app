@@ -1,8 +1,9 @@
 @using SunglassesApp.Helpers;
+@using SunglassesApp.Models
 @{
     Layout = "_AdminLayout";
 }
-@model IEnumerable<SunglassesApp.Models.Product>
+@model PaginatedList<Product>
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <h1>Proizvodi</h1>
@@ -22,8 +23,16 @@
                     @TempData["ErrorMessage"]
                 </div>
             }
-            <div class="card-header  text-center text-light bg-gray">
-                <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Tabela svih proizvoda sa lagera</h5>
+            <div class="card-header  text-center text-light bg-gray d-flex flex-row-reverse justify-content-between flex-wrap align-items-center">
+            <form method="get" asp-controller="Product" asp-action="ManageProducts" class="d-flex justify-content-end">
+                <select name="sortOrder" class="form-select" onchange="this.form.submit()">
+                    <option value="default" selected="@(ViewBag.CurrentSort == null || ViewBag.CurrentSort == "default")">Podrazumevano</option>
+                    <option value="price_asc" selected="@(ViewBag.CurrentSort == "price_asc")">Cena rastuće</option>
+                    <option value="price_desc" selected="@(ViewBag.CurrentSort == "price_desc")">Cena opadajuće</option>
+                    <option value="times_bought" selected="@(ViewBag.CurrentSort == "times_bought")">Najprodavaniji</option>
+                </select>
+            </form>
+                <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Proizvodi na lageru</h5>
             </div>
             <div class="card-body">
                 <div class="table-responsive  border-top rounded-top">
@@ -71,7 +80,45 @@
                         </tbody>
                         
                     </table>
-                    
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        @if (Model.HasPreviousPage)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ManageProducts"
+                                   asp-route-page="@(Model.PageIndex - 1)"
+                                   asp-route-sortOrder="@ViewBag.CurrentSort">
+                                   Prethodna
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled"><span class="page-link">Prethodna</span></li>
+                        }
+
+                        <li class="page-item disabled">
+                            <span class="page-link">
+                                Stranica @Model.PageIndex od @Model.TotalPages
+                            </span>
+                        </li>
+
+                        @if (Model.HasNextPage)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ManageProducts"
+                                   asp-route-page="@(Model.PageIndex + 1)"
+                                   asp-route-sortOrder="@ViewBag.CurrentSort">
+                                    Sledeća
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled"><span class="page-link">Sledeća</span></li>
+                        }
+                    </ul>
+                </nav>
                 </div>
                 
             </div>

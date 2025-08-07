@@ -25,9 +25,9 @@ namespace SunglassesApp.Data.Repositories.Implementations
             return await _context.Products.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Product>> GetAll()
+        public IQueryable<Product> GetAll()
         {
-            return await _context.Products.ToListAsync();
+            return  _context.Products.AsQueryable();
         }
 
         public Task Insert(Product product)
@@ -57,6 +57,7 @@ namespace SunglassesApp.Data.Repositories.Implementations
                 existingProduct.FrameType = product.FrameType;
                 existingProduct.Price = product.Price;
                 existingProduct.UVProtection = product.UVProtection;
+                existingProduct.Gender = product.Gender;
                 existingProduct.PromotionId = product.PromotionId;
                
 

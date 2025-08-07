@@ -63,6 +63,14 @@ namespace SunglassesApp.Models
         
     }
 
+    public enum Gender
+    {
+        [Display(Name = "Muške")]
+        Male,
+        [Display(Name = "Ženske")]
+        Female
+    }
+
     public enum Category
     {
         [Display(Name = "Moda")]

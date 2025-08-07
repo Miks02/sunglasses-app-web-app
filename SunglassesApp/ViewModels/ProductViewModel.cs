@@ -43,6 +43,9 @@ namespace SunglassesApp.ViewModels
         [Required(ErrorMessage = "Izaberite nivo UV zaštite")]
         public UVProtection? UVProtection { get; set; }
 
+        [Required(ErrorMessage = "Izaberite pol")]
+        public Gender? Gender { get; set; }
+
         public string? Description { get; set; }
 
         [Display(Name = "Promocije")]

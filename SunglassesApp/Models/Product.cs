@@ -17,6 +17,8 @@ namespace SunglassesApp.Models
         public Category? Category { get; set; } 
         public UVProtection? UVProtection { get; set; } 
 
+        public Gender? Gender { get; set; }
+
         public string Brand { get; set; } = null!;
         public string? Description { get; set; }
 

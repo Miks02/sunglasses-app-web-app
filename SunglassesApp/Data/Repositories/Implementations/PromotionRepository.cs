@@ -29,9 +29,9 @@ namespace SunglassesApp.Data.Repositories.Implementations
 
         }
 
-        public async Task<IEnumerable<Promotion>> GetAll()
+        public IQueryable<Promotion> GetAll()
         {
-            return await _context.Promotions.ToListAsync();
+            return  _context.Promotions.AsQueryable();
         }
 
         public Task Insert(Promotion item)

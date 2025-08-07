@@ -172,4 +172,8 @@ body {
 .dashboard-layout .form-group-wrapper .form-group {
   margin-top: 20px;
   min-width: 25%;
+}
+
+.form-select {
+  max-width: 200px;
 }/*# sourceMappingURL=site.css.map */

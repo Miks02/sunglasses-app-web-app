@@ -4,7 +4,7 @@ namespace SunglassesApp.Data.Repositories.Interfaces
 {
     public interface IPromotionRepository
     {
-        Task<IEnumerable<Promotion>> GetAll();
+        IQueryable<Promotion> GetAll();
         Task<Promotion?> Get(int id);
 
         Task Insert(Promotion item);
