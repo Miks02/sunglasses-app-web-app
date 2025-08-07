@@ -25,12 +25,12 @@
 
             <div class="sidebar-navigation">
                 <ul>
-                    <li><a asp-controller="Admin" asp-action="Index" class="sidebar-link">Admin panel</a></li>
-                    <li><a asp-controller="Admin" asp-action="ManageProducts" class="sidebar-link">Proizvodi</a></li>
-                    <li><a asp-controller="Admin" asp-action="AddProduct" class="sidebar-link">Dodaj proizvod</a></li>
-                    <li><a asp-asp-controller="Admin" class="sidebar-link">Promocije</a></li>
-                    <li><a asp-asp-controller="Admin" class="sidebar-link">Dodaj promociju</a></li>
-                    <li><a asp-asp-controller="Admin" class="sidebar-link">Klijenti</a></li>
+                    <li><a asp-area="Admin" asp-controller="Product" asp-action="Index" class="sidebar-link">Admin panel</a></li>
+                    <li><a asp-area="Admin" asp-controller="Product" asp-action="ManageProducts" class="sidebar-link">Proizvodi</a></li>
+                    <li><a asp-area="Admin" asp-controller="Product" asp-action="ProductForm" class="sidebar-link">Dodaj proizvod</a></li>
+                    <li><a asp-area="Admin" asp-controller="Promotion" asp-action="Index" class="sidebar-link">Promocije</a></li>
+                    <li><a asp-area="Admin" asp-controller="Promotion" asp-action="PromotionForm" class="sidebar-link">Dodaj promociju</a></li>
+                    <li><a asp-area="Admin" asp-controller="Admin" class="sidebar-link">Klijenti</a></li>
                      <li><a asp-asp-controller="Admin" class="sidebar-link">Porudžbine</a></li>
                     <li><a asp-asp-controller="Admin" class="sidebar-link">Podešavanja</a></li>
                     <form asp-action="Index" asp-controller="Home">

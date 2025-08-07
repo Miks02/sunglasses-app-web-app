@@ -1,0 +1,80 @@
+﻿@using SunglassesApp.ViewModels
+@{
+    Layout = "_AdminLayout";
+}
+
+@model PromotionViewModel;
+
+
+<div class="container-md">
+    @using (Html.BeginForm("AddPromotion", "Promotion", FormMethod.Post, new
+    {
+        @class = "needs-validation dark-gradient rounded-3 p-5 shadow",
+        novalidate = "novalidate"
+    }))
+    {
+        <h1>Dodaj promociju</h1>
+        @Html.AntiForgeryToken()
+
+        <div class="form-group-wrapper">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name, new { @class = "form-label text-light" })
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control bg-secondary text-light shadow" })
+                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.DiscountPercentage, new { @class = "form-label text-light" })
+                @Html.TextBoxFor(m => m.DiscountPercentage, new {
+                        @class = "form-control bg-secondary text-light shadow",
+                        type = "number",
+                        min = "10",
+                        max = "100",
+                      
+                })
+                @Html.ValidationMessageFor(m => m.DiscountPercentage, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group-wrapper">
+            <div class="form-group">
+                @Html.LabelFor(m => m.StartDate, new { @class = "form-label text-light" })
+                @Html.TextBoxFor(m => m.StartDate, new {
+                    @class = "form-control bg-secondary text-light shadow",
+                    Type = "date"
+                })
+                @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
+            </div>
+           
+        </div>
+
+        <div class="form-group-wrapper">
+            <div class="form-group">
+                @Html.LabelFor(m => m.EndDate, new { @class = "form-label text-light" })
+                @Html.TextBoxFor(m => m.EndDate, new { 
+                    @class = "form-control bg-secondary text-light shadow",
+                    type = "date"
+                })
+                @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+    <div class="d-flex justify-content-center pt-4">
+        <button type="submit" class="btn btn-success shadow">Sačuvaj</button>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger mt-3">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    }
+</div>

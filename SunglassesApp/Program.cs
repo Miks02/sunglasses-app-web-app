@@ -19,6 +19,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequiredUniqueChars = 0;
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -37,6 +38,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

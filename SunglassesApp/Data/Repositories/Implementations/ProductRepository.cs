@@ -30,9 +30,10 @@ namespace SunglassesApp.Data.Repositories.Implementations
             return await _context.Products.ToListAsync();
         }
 
-        public async Task Insert(Product product)
+        public Task Insert(Product product)
         {
-            await _context.Products.AddAsync(product);
+            _context.Products.AddAsync(product);
+            return Task.CompletedTask;
         }
 
         public async Task Save()
@@ -40,10 +41,29 @@ namespace SunglassesApp.Data.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public Task Update(Product product)
+        public async Task Update(Product product)
         {
-            _context.Products.Update(product);
-            return Task.CompletedTask;
+    
+            var existingProduct = await _context.Products.FindAsync(product.Id);
+            if(existingProduct != null)
+            {
+                existingProduct.Model = product.Model;
+                existingProduct.Brand = product.Brand;
+                existingProduct.Category = product.Category;
+                existingProduct.ImageUrl = product.ImageUrl;
+                existingProduct.Description = product.Description;
+                existingProduct.LensColor = product.LensColor;
+                existingProduct.FrameColor = product.FrameColor;
+                existingProduct.FrameType = product.FrameType;
+                existingProduct.Price = product.Price;
+                existingProduct.UVProtection = product.UVProtection;
+                existingProduct.PromotionId = product.PromotionId;
+               
+
+            }
+
+            await _context.SaveChangesAsync();
+            
         }
     }
 }
