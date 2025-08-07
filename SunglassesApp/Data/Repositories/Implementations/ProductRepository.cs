@@ -65,5 +65,15 @@ namespace SunglassesApp.Data.Repositories.Implementations
             await _context.SaveChangesAsync();
             
         }
+
+        public async Task ClearPromotions(int id)
+        {
+
+            await _context.Products
+                .Where(p => p.PromotionId == id)
+                .ExecuteUpdateAsync(p => p.SetProperty(x => x.PromotionId, (int?)null));
+
+       
+        }
     }
 }

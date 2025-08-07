@@ -89,7 +89,7 @@ namespace SunglassesApp.Controllers
                         Text = p.Name,
                     }).ToList(),
                 };
-                TempData["SuccessMessage"] = updatedProduct.IsEdit;
+              
                 _logger.LogInformation("Funkcija je uspela");
                 return View("ProductForm", updatedProduct);
             }
@@ -202,7 +202,7 @@ namespace SunglassesApp.Controllers
                     }
                 }
 
-                TempData["ErrorMessage"] = "Došlo je do greške prilikom dodavanja proizvoda " + product.PromotionId;
+                TempData["ErrorMessage"] = "Došlo je do greške prilikom dodavanja proizvoda ";
                 return View("ProductForm", viewModel);
             } 
 
@@ -242,7 +242,7 @@ namespace SunglassesApp.Controllers
                 {
 
                     _logger.LogError("Greška: " + ex);
-                    TempData["ErrorMessage"] = "Došlo je do greške prilikom dodavanja proizvoda" + product.PromotionId;
+                    TempData["ErrorMessage"] = "Došlo je do greške prilikom dodavanja proizvoda";
                     ModelState.AddModelError(string.Empty, "Došlo je do greške prilikom dodavanja proizvoda");
 
                     var promotions = await _promotionRepository.GetAll();

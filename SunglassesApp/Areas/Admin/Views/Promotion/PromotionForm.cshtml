@@ -1,20 +1,31 @@
 ﻿@using SunglassesApp.ViewModels
+@model PromotionViewModel;
 @{
     Layout = "_AdminLayout";
+    bool isEdit = false;
+    if(Model != null)
+    {
+        isEdit = Model.IsEdit;
+    }
+
+    string header = isEdit ? "Izmena promocije" : "Dodaj promociju";
 }
 
-@model PromotionViewModel;
+
 
 
 <div class="container-md">
-    @using (Html.BeginForm("AddPromotion", "Promotion", FormMethod.Post, new
+    @using (Html.BeginForm(isEdit ? "SavePromotion" : "AddPromotion", "Promotion", FormMethod.Post, new
     {
         @class = "needs-validation dark-gradient rounded-3 p-5 shadow",
         novalidate = "novalidate"
     }))
     {
-        <h1>Dodaj promociju</h1>
+        <h1>@header</h1>
         @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.Id);
+      
 
         <div class="form-group-wrapper">
             <div class="form-group">
@@ -37,10 +48,10 @@
 
         <div class="form-group-wrapper">
             <div class="form-group">
-                @Html.LabelFor(m => m.StartDate, new { @class = "form-label text-light" })
-                @Html.TextBoxFor(m => m.StartDate, new {
+                @Html.LabelFor(m => m.StartDate,  new { @class = "form-label text-light" })
+                @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new {
                     @class = "form-control bg-secondary text-light shadow",
-                    Type = "date"
+                    type = "date"
                 })
                 @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
             </div>
@@ -49,10 +60,11 @@
 
         <div class="form-group-wrapper">
             <div class="form-group">
-                @Html.LabelFor(m => m.EndDate, new { @class = "form-label text-light" })
-                @Html.TextBoxFor(m => m.EndDate, new { 
-                    @class = "form-control bg-secondary text-light shadow",
-                    type = "date"
+                @Html.LabelFor(m => m.EndDate,  new { @class = "form-label text-light" })
+            @Html.TextBoxFor(m => m.EndDate,"{0:yyyy-MM-dd}", new {
+                        @class = "form-control bg-secondary text-light shadow",
+                    type = "date",
+                     
                 })
                 @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
             </div>

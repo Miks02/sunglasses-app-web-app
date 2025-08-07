@@ -10,6 +10,8 @@ namespace SunglassesApp.Data.Repositories.Interfaces
         Task Update(Product product);
         Task Insert(Product product);
 
+        Task ClearPromotions(int id);
         Task Save();
+
     }
 }

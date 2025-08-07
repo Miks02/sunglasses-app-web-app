@@ -46,10 +46,23 @@ namespace SunglassesApp.Data.Repositories.Implementations
             
         }
 
-        public Task Update(Promotion item)
+        public async Task Update(Promotion item)
         {
-            _context.Promotions.Update(item);
-            return Task.CompletedTask;
+
+            var existingPromotion = await _context.Promotions.FindAsync(item.Id);
+
+            if (existingPromotion == null)
+                throw new KeyNotFoundException($"Promocija sa unetim ID-em {item.Id} nije pronadjena");
+
+            existingPromotion.Name = item.Name;
+            existingPromotion.DiscountPercentage = item.DiscountPercentage;
+            existingPromotion.StartDate = item.StartDate;
+            existingPromotion.EndDate = item.EndDate;
+
+            
+            
         }
+
+        
     }
 }

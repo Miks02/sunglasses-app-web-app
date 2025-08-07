@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using SunglassesApp.Data.Repositories.Interfaces;
 using SunglassesApp.Models;
 using SunglassesApp.ViewModels;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace SunglassesApp.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class PromotionController : Controller
     {
         private readonly IPromotionRepository _promotionRepository;
@@ -35,9 +39,25 @@ namespace SunglassesApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPromotion(PromotionViewModel model)
         {
+            ModelState.Remove("Id");
+
             if(!ModelState.IsValid)
             {
                 TempData["ErrorMessage"] = "Uneti podaci nisu validni";
+                foreach (var key in ModelState.Keys)
+                {
+                    var state = ModelState[key];
+                    if (state == null) break;
+                    if (state.Errors.Any())
+                    {
+                        _logger.LogInformation($"Greška u polju: {key}");
+                        foreach (var error in state.Errors)
+                        {
+                            _logger.LogInformation($" - {error.ErrorMessage}");
+                        }
+                    }
+                }
+
                 return View("PromotionForm", model);
             }
 
@@ -60,7 +80,7 @@ namespace SunglassesApp.Controllers
                 _logger.LogError("Greška: " + ex);
                 TempData["ErrorMessage"] = "Došlo je do greške prilkom dodavanja promocije";
             }
-
+            
             return View("PromotionForm", model);
 
         }
@@ -70,7 +90,7 @@ namespace SunglassesApp.Controllers
         {
             try
             {
-          
+;               await _productRepository.ClearPromotions(id);
 
                 await _promotionRepository.Delete(id);
                 await _promotionRepository.Save();
@@ -86,6 +106,66 @@ namespace SunglassesApp.Controllers
 
             
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditPromotion(int id)
+        {
+            var promotion = await _promotionRepository.Get(id);
+
+            if(promotion == null)
+            {
+                TempData["ErrorMessage"] = "Promocija nije pronadjena";
+                return View("Index");
+            }
+
+            var updatedPromotion = new PromotionViewModel
+            {
+                Name = promotion.Name,
+                DiscountPercentage = promotion.DiscountPercentage,
+                StartDate = promotion.StartDate,
+                EndDate = promotion.EndDate,
+                IsEdit = true
+            };
+
+            _logger.LogInformation("Pocetni datum: " + updatedPromotion.StartDate);
+
+            return View("PromotionForm", updatedPromotion);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SavePromotion(PromotionViewModel viewModel)
+        {
+
+            if(!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Uneti podaci nisu validni";
+                return RedirectToAction("EditPromotion", viewModel);
+            }
+
+            var updatedPromotion = new Promotion
+            {
+                Id = viewModel.Id,
+                Name = viewModel.Name,
+                DiscountPercentage = viewModel.DiscountPercentage,
+                StartDate = viewModel.StartDate,
+                EndDate = viewModel.EndDate,
+            };
+
+            try
+            {
+                await _promotionRepository.Update(updatedPromotion);
+                await _promotionRepository.Save();
+
+                TempData["SuccessMessage"] = "Promocija je uspešno ažurirana";
+                return RedirectToAction("Index");
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("Greška: " + ex);
+                TempData["ErrorMessage"] = "Došlo je do greške prilikom ažuriranja promocije\nPokušajte ponovo...";
+                return RedirectToAction("EditPromotion", viewModel);
+            }
         }
 
 

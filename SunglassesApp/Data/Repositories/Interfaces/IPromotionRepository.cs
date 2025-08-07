@@ -12,5 +12,7 @@ namespace SunglassesApp.Data.Repositories.Interfaces
         Task Delete(int id);
 
         Task Save();
+
+      
     }
 }

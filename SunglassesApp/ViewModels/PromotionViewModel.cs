@@ -6,6 +6,7 @@ namespace SunglassesApp.ViewModels
     public class PromotionViewModel
     {
         public int Id { get; set; }
+        public bool IsEdit { get; set; } = false;
 
         [Display(Name = "Naziv promocije")]
         [Required(ErrorMessage = "Unesite naziv promocije")]
