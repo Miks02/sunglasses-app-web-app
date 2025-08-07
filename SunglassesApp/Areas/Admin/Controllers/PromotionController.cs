@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using SunglassesApp.Data.Repositories.Interfaces;
+using SunglassesApp.Helpers;
 using SunglassesApp.Models;
 using SunglassesApp.ViewModels;
 using System.ComponentModel.DataAnnotations;
@@ -44,19 +45,7 @@ namespace SunglassesApp.Controllers
             if(!ModelState.IsValid)
             {
                 TempData["ErrorMessage"] = "Uneti podaci nisu validni";
-                foreach (var key in ModelState.Keys)
-                {
-                    var state = ModelState[key];
-                    if (state == null) break;
-                    if (state.Errors.Any())
-                    {
-                        _logger.LogInformation($"Greška u polju: {key}");
-                        foreach (var error in state.Errors)
-                        {
-                            _logger.LogInformation($" - {error.ErrorMessage}");
-                        }
-                    }
-                }
+                Helper.LogModelErrors(ModelState, _logger, "Uneti podaci nisu validni");
 
                 return View("PromotionForm", model);
             }
@@ -140,6 +129,7 @@ namespace SunglassesApp.Controllers
             if(!ModelState.IsValid)
             {
                 TempData["ErrorMessage"] = "Uneti podaci nisu validni";
+                Helper.LogModelErrors(ModelState, _logger, "Uneti podaci nisu validni");
                 return RedirectToAction("EditPromotion", viewModel);
             }
 

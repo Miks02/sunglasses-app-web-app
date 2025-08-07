@@ -7,6 +7,7 @@ using SunglassesApp.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SunglassesApp.Helpers;
 
 namespace SunglassesApp.Controllers
 {
@@ -71,7 +72,7 @@ namespace SunglassesApp.Controllers
                     Id = product.Id,
                     Brand = product.Brand,
                     Model = product.Model,
-                    Price = product.Price,             
+                    Price = product.Price,
                     FrameColor = product.FrameColor,
                     FrameType = product.FrameType,
                     LensColor = product.LensColor,
@@ -80,14 +81,10 @@ namespace SunglassesApp.Controllers
                     Description = product.Description,
                     PromotionId = product.PromotionId,
                     ImageUrl = product.ImageUrl,
-                    IsEdit = true, 
+                    IsEdit = true,
 
 
-                    PromotionsList = promotions.Select(p => new SelectListItem
-                    {
-                        Value = p.Id.ToString(),
-                        Text = p.Name,
-                    }).ToList(),
+                    PromotionsList = Helper.LoadPromotions(promotions)
                 };
               
                 _logger.LogInformation("Funkcija je uspela");
@@ -104,27 +101,11 @@ namespace SunglassesApp.Controllers
 
             if (!ModelState.IsValid)
             {
-                product.PromotionsList = promotions.Select(p => new SelectListItem
-                {
-                    Value = p.Id.ToString(),
-                    Text = p.Name,
-                }).ToList();
+                product.PromotionsList = Helper.LoadPromotions(promotions);
 
                 _logger.LogInformation(product.ToString());
 
-                foreach (var key in ModelState.Keys)
-                {
-                    var state = ModelState[key];
-                    if (state == null) break;
-                    if (state.Errors.Any())
-                    {
-                        _logger.LogInformation($"Greška u polju: {key}");
-                        foreach (var error in state.Errors)
-                        {
-                            _logger.LogInformation($" - {error.ErrorMessage}");
-                        }
-                    }
-                }
+                Helper.LogModelErrors(ModelState, _logger, "Uneti podaci nisu validni");
 
                 product.IsEdit = true;
                 return View("ProductForm", product);
@@ -181,26 +162,10 @@ namespace SunglassesApp.Controllers
 
                 var viewModel = new ProductViewModel
                 {
-                    PromotionsList = promotions.Select(p => new SelectListItem
-                    {
-                        Value = p.Id.ToString(),
-                        Text = p.Name,
-                    }).ToList(),
+                    PromotionsList = Helper.LoadPromotions(promotions)
                 };
 
-                foreach (var key in ModelState.Keys)
-                {
-                    var state = ModelState[key];
-                    if (state == null) break;
-                    if (state.Errors.Any())
-                    {
-                        _logger.LogInformation($"Greška u polju: {key}");
-                        foreach (var error in state.Errors)
-                        {
-                            _logger.LogInformation($" - {error.ErrorMessage}");
-                        }
-                    }
-                }
+                Helper.LogModelErrors(ModelState, _logger, "Uneti podaci nisu validni");
 
                 TempData["ErrorMessage"] = "Došlo je do greške prilikom dodavanja proizvoda ";
                 return View("ProductForm", viewModel);
@@ -247,12 +212,8 @@ namespace SunglassesApp.Controllers
 
                     var promotions = await _promotionRepository.GetAll();
 
-               
-                    product.PromotionsList = promotions.Select(p => new SelectListItem
-                    {
-                        Value = p.Id.ToString(),
-                        Text = p.Name
-                    }).ToList();
+
+                    product.PromotionsList = Helper.LoadPromotions(promotions);
 
                     return View("ProductForm", product);
                 }
