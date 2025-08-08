@@ -17,9 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\User\" />
     <Folder Include="Sunglasses images\" />
-    <Folder Include="NewFolder\" />
   </ItemGroup>
 
 </Project>

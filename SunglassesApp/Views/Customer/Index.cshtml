@@ -1,0 +1,197 @@
+﻿@using SunglassesApp.Models;
+@using SunglassesApp.Helpers;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model IEnumerable<SunglassesApp.Models.Product>
+
+@{
+    Layout = "_Layout";
+
+    var products = Model.ToList();
+    
+    var productCategories = EnumExtensions.GetDisplayNames<Category>();
+    var productFrameTypes = EnumExtensions.GetDisplayNames<FrameType>();
+    var productFrameColors = EnumExtensions.GetDisplayNames<FrameColor>();
+    var productLensColors = EnumExtensions.GetDisplayNames<LensColor>();
+    var productUv = EnumExtensions.GetDisplayNames<UVProtection>();
+
+}
+
+
+<div class="container-fluid p-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0 text-light">Pregled kataloga</h4>
+            <div class="d-flex gap-2 align-items-center">
+                <form method="get" asp-controller="Customer" asp-action="Index" class="d-flex justify-content-end">
+                <select name="sortOrder" class="form-select rounded-3 shadow" onchange="this.form.submit()">
+                    <option value="default" selected="@(ViewBag.CurrentSort == null || ViewBag.CurrentSort == "default")">Podrazumevano</option>
+                    <option value="price_asc" selected="@(ViewBag.CurrentSort == "price_asc")">Cena rastuće</option>
+                    <option value="price_desc" selected="@(ViewBag.CurrentSort == "price_desc")">Cena opadajuće</option>
+                    <option value="times_bought" selected="@(ViewBag.CurrentSort == "times_bought")">Najprodavaniji</option>
+                </select>
+            </form>
+            </div>
+        </div>
+
+        <div class="row g-4">
+          
+            <div class="col-lg-3">
+                <div class="filter-sidebar p-4 shadow-sm">
+                    <div class="filter-group">
+                        <h6 class="mb-3">Kategorije</h6>
+                    @foreach(var category in productCategories)
+                    {
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="electronics">
+                            <label class="form-check-label" for="electronics">
+                                @category
+                            </label>
+                        </div>
+                    }
+
+                    </div>
+
+                <div class="filter-group">
+                    <h6 class="mb-3">Oblik</h6>
+                    @foreach (var filter in productFrameTypes)
+                    {
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="electronics">
+                            <label class="form-check-label" for="electronics">
+                                @filter
+                            </label>
+                        </div>
+                    }
+
+                </div>
+
+                <div class="filter-group">
+                    <h6 class="mb-3">Boja okvira</h6>
+                    @foreach (var filter in productFrameColors)
+                    {
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="electronics">
+                            <label class="form-check-label" for="electronics">
+                                @filter
+                            </label>
+                        </div>
+                    }
+
+                </div>
+
+                <div class="filter-group">
+                    <h6 class="mb-3">Boja stakala</h6>
+                    @foreach (var filter in productLensColors)
+                    {
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="electronics">
+                            <label class="form-check-label" for="electronics">
+                                @filter
+                            </label>
+                        </div>
+                    }
+
+                </div>
+
+                <div class="filter-group">
+                    <h6 class="mb-3">UV Zaštita</h6>
+                    @foreach (var filter in productUv)
+                    {
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="electronics">
+                            <label class="form-check-label" for="electronics">
+                                @filter
+                            </label>
+                        </div>
+                    }
+
+                </div>
+
+                    <div class="filter-group">
+                        <h6 class="mb-3">Cenovni opseg</h6>
+                        <input type="range" class="form-range" min="0" max="100000" value="50000">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">0 RSD</span>
+                            <span class="text-muted">100000 RSD</span>
+                        </div>
+                    </div>
+
+                    @* <div class="filter-group">
+                        <h6 class="mb-3">Colors</h6>
+                        <div class="d-flex gap-2">
+                            <div class="color-option selected" style="background: #000000;"></div>
+                            <div class="color-option" style="background: #dc2626;"></div>
+                            <div class="color-option" style="background: #2563eb;"></div>
+                            <div class="color-option" style="background: #16a34a;"></div>
+                        </div>
+                    </div> *@
+
+                    @* <div class="filter-group">
+                        <h6 class="mb-3">Rating</h6>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="rating" id="rating4">
+                            <label class="form-check-label" for="rating4">
+                                <i class="bi bi-star-fill text-warning"></i> 4 & above
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="rating" id="rating3">
+                            <label class="form-check-label" for="rating3">
+                                <i class="bi bi-star-fill text-warning"></i> 3 & above
+                            </label>
+                        </div>
+                    </div> *@
+
+                    <button class="btn btn-outline-primary w-100">Apply Filters</button>
+                </div>
+            </div>
+
+         
+            <div class="col-lg-9">
+                <div class="row g-4">
+                    <!-- Product Card 1 -->
+                @foreach(var product in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="product-card shadow-sm">
+                            <div class="position-relative">
+                                <a href="#"><img src="@product.ImageUrl" class="product-image w-100" alt="Product"></a>
+                                @if(product.PromotionId != null)
+                                {
+                                    <span class="discount-badge">Promocija</span>
+                                }
+
+                            </div>
+                            <div class="p-3">
+                                <span class="category-badge mb-2 d-inline-block">@product.Category!.GetDisplayName()</span>
+                                <h6 class="mb-1">@product.Name</h6>
+                                
+                                <div class="rating-stars mb-2">
+                                    <i class="bi bi-star-fill"></i>
+                                   
+                                    <span class="text-muted ms-2">(4.5)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="price">@product.Price RSD</span>
+
+                                    @{
+                                        if(User.IsInRole("User") && SignInManager.IsSignedIn(User))
+                                        {
+                                            <button class="btn cart-btn hover">
+                                                <i class="bi bi-cart4"></i>
+                                            </button>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                   
+
+                </div>
+            </div>
+        </div>
+    </div>

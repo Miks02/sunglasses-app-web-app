@@ -33,10 +33,10 @@
                     <li><a asp-area="Admin" asp-controller="Admin" class="sidebar-link">Klijenti</a></li>
                      <li><a asp-asp-controller="Admin" class="sidebar-link">Porudžbine</a></li>
                     <li><a asp-asp-controller="Admin" class="sidebar-link">Podešavanja</a></li>
-                    <form asp-action="Index" asp-controller="Home">
-                        <li><button  class="sidebar-link text-light ">Izlaz</button></li>
+                    <form asp-area=""  asp-controller="Home" asp-action="Index">
+                        <li><button type="submit"  class="sidebar-link text-light ">Izlaz</button></li>
                     </form>
-                    <form asp-action="Logout" asp-controller="Account">
+                    <form asp-area="" asp-action="Logout" asp-controller="Account">
                         <li><button  class="sidebar-link text-danger mt-5  ">Odjava</button></li>
                     </form>
                 </ul>

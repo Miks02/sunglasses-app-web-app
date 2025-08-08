@@ -12,5 +12,21 @@ namespace SunglassesApp.Helpers
                 .GetCustomAttribute<DisplayAttribute>()?
                 .GetName() ?? enumValue.ToString();
         }
+
+        public static List<string> GetDisplayNames<T>() where T : Enum
+        {
+            return Enum.GetValues(typeof(T))
+                       .Cast<T>()
+                       .Select(e =>
+                       {
+                           var display = e.GetType()
+                                          .GetField(e.ToString())
+                                          ?.GetCustomAttribute<DisplayAttribute>();
+
+                           return display?.Name ?? e.ToString();
+                       })
+                       .ToList();
+        }
+
     }
 }
