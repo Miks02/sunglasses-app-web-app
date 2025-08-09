@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SunglassesApp.Data;
 
@@ -11,9 +12,11 @@ using SunglassesApp.Data;
 namespace SunglassesApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250809091931_AddComentsTableToDb")]
+    partial class AddComentsTableToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,7 +263,7 @@ namespace SunglassesApp.Migrations
                         {
                             Id = "80c32529-9d23-4d53-a0b3-89c710f5fd96",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dba07e3c-e11f-471e-8f16-2973cab27fd4",
+                            ConcurrencyStamp = "6ce1d6c4-3307-494f-9047-991f6760ebed",
                             Email = "test@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "FirstName",
@@ -268,9 +271,9 @@ namespace SunglassesApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST@GMAIL.COM",
                             NormalizedUserName = "USER35",
-                            PasswordHash = "AQAAAAIAAYagAAAAENEaqkysKzDFaUmgLxNZ748XukVfa1fUJWFbJTZ6bBOkyGC7/tZGQjMneHmDZq0i/g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKXKL+Wfz2VDQYMg6pZFwR5pC8IkVdEPjG9xJCldf3oh2kxGZYoRgtAToCBECct3lQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2356d03b-527a-47cb-8110-2702dfe4f9d6",
+                            SecurityStamp = "3d58e2cd-9532-4927-95f7-2640120b09a4",
                             TwoFactorEnabled = false,
                             UserName = "user35"
                         },
@@ -278,7 +281,7 @@ namespace SunglassesApp.Migrations
                         {
                             Id = "e1976e68-c98a-46f6-9f1e-c0a87ef94609",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b779a0ee-3723-4707-81c1-622823fa1557",
+                            ConcurrencyStamp = "43dff86c-00eb-445a-8e0d-d4bbee55179c",
                             Email = "admin02@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -286,9 +289,9 @@ namespace SunglassesApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN02@GMAIL.COM",
                             NormalizedUserName = "ADMIN02",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJ5p3qqRBcKlX7lEcJf//fr1BzZz8Hg8eDmaIVEQAg29nXjMA7PiRN/VsUoTD+lOPQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFtJZMmyoEaeRJHvg5YPZXIziAVrAOue+yUj/BXvvZMx1wUAedtd3rO+hnaBzDwPRQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "26f841e0-3241-4b90-8d03-1f3a86077efa",
+                            SecurityStamp = "9f60eb58-3143-40c6-9ca9-870b739eeb86",
                             TwoFactorEnabled = false,
                             UserName = "Admin02"
                         });
@@ -302,8 +305,8 @@ namespace SunglassesApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("AddedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("AddedAt")
+                        .HasColumnType("date");
 
                     b.Property<string>("Content")
                         .IsRequired()

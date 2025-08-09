@@ -13,12 +13,14 @@ namespace SunglassesApp.Controllers
 
         private readonly IProductRepository _productRepository;
         private readonly IPromotionRepository _promotionRepository;
+        private readonly ICommentRepository _commentRepository;
         private ILogger<CustomerController> _logger;
 
-        public CustomerController(IProductRepository productRepository, IPromotionRepository promotionRepository, ILogger<CustomerController> logger)
+        public CustomerController(IProductRepository productRepository, IPromotionRepository promotionRepository,ICommentRepository commentRepository ,ILogger<CustomerController> logger)
         {
             _productRepository = productRepository;
             _promotionRepository = promotionRepository;
+            _commentRepository = commentRepository;
             _logger = logger;
         }
         [AllowAnonymous]
@@ -55,11 +57,14 @@ namespace SunglassesApp.Controllers
         public async Task<IActionResult> ProductDetails(int id)
         {
             var product = await _productRepository.Get(id);
+            var comments =  await _commentRepository.GetByProductId(id).ToListAsync();
+            
 
             if (product == null) return View("Index");
 
-            var viewModel = new ProductViewModel
+            var productVm = new ProductViewModel
             {
+                Id = product.Id,
                 Model = product.Model,
                 Brand = product.Brand,
                 Price = product.Price,
@@ -76,7 +81,14 @@ namespace SunglassesApp.Controllers
                 Promotion = product.Promotion
             };
 
-            return View(viewModel);
+            var DetailsVm = new ProductDetailsViewModel
+            {
+                ProductVm = productVm,
+                Comments = comments
+            };
+           
+
+            return View(DetailsVm);
         }
     }
 }

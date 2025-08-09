@@ -17,12 +17,13 @@ namespace SunglassesApp.Data
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
+            
             var userRoleId = "38ba0b14-cd93-4e0f-a74f-b1080e7e4c48";
             var adminRoleId = "218f1a02-f071-4468-b646-48a24e11e1d8";
             

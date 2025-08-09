@@ -3,9 +3,24 @@
 @using SunglassesApp.Helpers;
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-@model  ProductViewModel;
+@model  ProductDetailsViewModel;
 @{
     Layout = "_Layout";
+    string errorMessage = "";
+    if(TempData["ErrorMessage"] != null)
+    {
+        errorMessage = TempData["ErrorMessage"]!.ToString()!;
+    }
+
+    var currentUser = await UserManager.GetUserAsync(User);
+    string currUserId = "";
+    if(currentUser != null)
+    {
+        currUserId = currentUser!.Id;
+    }
+   
+
+
 }
 <style>
     .comment-section {
@@ -94,28 +109,32 @@
        
         
         <div class="col-md-6 mb-4">
-            <img src="@Model.ImageUrl" alt="Product" class="img-fluid rounded w-100 product-image h-100" id="mainImage">
+            <img src="@Model.ProductVm!.ImageUrl" alt="Product" class="img-fluid rounded w-100 product-image h-100" id="mainImage">
         </div>
 
         <div class="col-md-6">
-            <h2 class="mb-3">@Model.Brand @Model.Model</h2>
+            <h2 class="mb-3">@Model.ProductVm.Brand @Model.ProductVm.Model</h2>
 
-            @if(Model.Promotion != null)
+            @if(Model.ProductVm.Promotion != null)
             {
             <div class="d-inline-flex flex-column">
-                <p class="text-danger fs-5 fw-bolder bg-black bg-opacity-25 p-2 mt-2 mb-2 d-inline mb-4 rounded-3 ">@Model.Promotion?.Name -@Model.Promotion?.DiscountPercentage%</p>
-                <span class="text-muted mb-2">Promocija traje do @string.Format("{0:dd.MM.yyyy}", Model.Promotion!.EndDate)</span>
+                <p class="text-danger fs-5 fw-bolder bg-black bg-opacity-25 p-2 mt-2 mb-2 d-inline mb-4 rounded-3 ">@Model.ProductVm.Promotion?.Name -@Model.ProductVm.Promotion?.DiscountPercentage%</p>
+                <span class="text-muted mb-2">Promocija traje do @string.Format("{0:dd.MM.yyyy}", Model.ProductVm.Promotion!.EndDate)</span>
             </div>
             }
  
 
             <div class="mb-3 mt-3">
-            @if(Model.Promotion != null)
+            @if (Model.ProductVm.Promotion != null)
             {
-                <span class="h4 me-2">@Model.PromoPrice RSD</span>
-                <span class="text-danger fw-bolder"><s>@Model.Price RSD</s></span>
+                <span class="h4 me-2">@Model.ProductVm.PromoPrice RSD</span>
+                <span class="text-danger fw-bolder"><s>@Model.ProductVm.Price RSD</s></span>
             }
-            <span class="price h4 fw-bolder">@Model.Price RSD</span>
+            else
+            {
+                <span class="price h4 fw-bolder">@Model.ProductVm.Price RSD</span>
+
+            }
             </div>
             <div class="mb-3">
                 <i class="bi bi-star-fill text-warning"></i>
@@ -123,7 +142,7 @@
                 <span class="ms-2">4.5 (120 recenzija)</span>
             </div>
             <p class="mb-4">
-                @Model.Description
+            @Model.ProductVm.Description
             </p>
 
             <div class="mb-4">
@@ -137,12 +156,12 @@
             <div class="mt-4">
                 <h5>Specifikacije:</h5>
                 <ul>
-                    <li>Kategorija: @Model.Category?.GetDisplayName()</li>
-                    <li>Pol: @Model.Gender?.GetDisplayName()</li>
-                    <li>Oblik okvira: @Model.FrameType?.GetDisplayName()</li>
-                    <li>Boja okvira: @Model.FrameColor?.GetDisplayName()</li>
-                    <li>Boja stakala: @Model.LensColor?.GetDisplayName()</li>
-                    <li>UV zaštita: @Model.UVProtection?.GetDisplayName()</li>
+                <li>Kategorija: @Model.ProductVm.Category?.GetDisplayName()</li>
+                <li>Pol: @Model.ProductVm.Gender?.GetDisplayName()</li>
+                <li>Oblik okvira: @Model.ProductVm.FrameType?.GetDisplayName()</li>
+                <li>Boja okvira: @Model.ProductVm.FrameColor?.GetDisplayName()</li>
+                <li>Boja stakala: @Model.ProductVm.LensColor?.GetDisplayName()</li>
+                <li>UV zaštita: @Model.ProductVm.UVProtection?.GetDisplayName()</li>
                 </ul>
             </div>
         </div>
@@ -154,43 +173,95 @@
         <div class="container">
             <div class="comment-section">
                 <!-- New Comment Form -->
+                <h2 class="text-warning fw-bolder text-center ">Komentari kupaca</h2>
+                
+
+            @if (User.IsInRole("User") && SignInManager.IsSignedIn(User))
+            {
+
                 <div class="mb-4">
                     <div class="d-flex gap-3  flex-column">
                         <div class="d-block fw-bolder text-success">
                             <span class="p-1 rounded-3">@User.Identity?.Name</span>
                         </div>
                         <div class="flex-grow-1">
-                            <textarea class="form-control comment-input" rows="3" placeholder="Napišite komentar"></textarea>
-                            <div class="mt-3 text-end">
-                                <button class="btn btn-comment text-white">Objavi komentar</button>
-                            </div>
+                            
+                            @using (Html.BeginForm("AddComment", "Comment", FormMethod.Post, new
+                            {
+                                @class = "needs-validation ",
+                                novalidate = "novalidate"
+                            }))
+                            {
+                                @Html.HiddenFor(m => m.ProductVm!.Id)
+                                @* <textarea class="form-control comment-input" rows="3" placeholder="Napišite komentar"></textarea> *@
+                                @Html.TextAreaFor(m => m.CommentVm!.Content, new {@class = "form-control comment-input", rows = 3})
+                                @Html.ValidationMessageFor(m => m.CommentVm!.Content, errorMessage, new { @class = "text-danger mx-2 fw-bold" })
+
+                                <div class=" text-end">
+                                    <button class="btn btn-comment text-white" type="submit">Objavi komentar</button>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
+            }
+            else if (!SignInManager.IsSignedIn(User))
+            {
+                <h6 class="text-secondary fw-bolder text-center ">Samo registrovani korisnici mogu da ostavljaju komentare</h6>
+            }
 
-                <!-- Comments List -->
                 <div class="comments-list">
                     
-
-                    <!-- Comment 2 -->
+                @foreach(var c in Model.Comments)
+                {
+                    
                     <div class="comment-box">
                         <div class="d-flex gap-3">
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <h6 class="mb-0">Mike Johnson</h6>
-                                    <span class="comment-time">3 hours ago</span>
+                                    @if(c.UserId == currUserId)
+                                    {
+                                        <h6 class="mb-0 text-success">@c.User.UserName</h6>
+                                    }
+                                    else
+                                    {
+                                        <h6 class="mb-0">@c.User.UserName</h6>
+                                    }
+                                    
+
+                                    <span class="comment-time">@c.AddedAt</span>
                                 </div>
                                 <p class="mb-2">
-                                    Great discussion everyone! I'd like to add that this topic has many
-                                    interesting aspects we could explore further.
+                                    @c.Content
                                 </p>
                                 <div class="comment-actions">
-                                    <a href="#"><i class="bi bi-trash3-fill"></i> Obriši komentar</a>
 
+                                    @if(c.UserId == currUserId)
+                                    {
+                                        <form asp-action="DeleteComment" asp-controller="Comment" asp-route-id="@c.Id" method="post" class="d-inline">
+                                            <button type="submit" class="border-0 p-0 bg-transparent">
+                                                <i class="bi bi-trash3-fill"></i> Obriši komentar
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (User.IsInRole("Admin"))
+                                    {
+                                        <form asp-action="DeleteComment" asp-controller="Comment" asp-route-id="@c.Id" method="post" class="d-inline">
+                                            <button type="submit" class="border-0 p-0 bg-transparent">
+                                                <i class="bi bi-trash3-fill"></i> Obriši komentar
+                                            </button>
+                                        </form>
+                                    }
+
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
+                }
+
+                    
+                    
                 </div>
             </div>
         </div>

@@ -31,6 +31,7 @@ namespace SunglassesApp.Models
 
         public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 
 }
