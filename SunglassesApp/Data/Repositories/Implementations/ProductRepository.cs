@@ -22,12 +22,16 @@ namespace SunglassesApp.Data.Repositories.Implementations
 
         public async Task<Product?> Get(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products
+                    .Include(p => p.Promotion)
+                    .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public IQueryable<Product> GetAll()
         {
-            return  _context.Products.AsQueryable();
+            return  _context.Products
+                    .Include(p => p.Promotion)
+                    .AsQueryable();
         }
 
         public Task Insert(Product product)
@@ -45,25 +49,29 @@ namespace SunglassesApp.Data.Repositories.Implementations
         {
     
             var existingProduct = await _context.Products.FindAsync(product.Id);
-            if(existingProduct != null)
+            if(existingProduct == null) throw new Exception("Proizvod nije pronadjen");
+
+            existingProduct.Model = product.Model;
+            existingProduct.Brand = product.Brand;
+            existingProduct.Category = product.Category;
+            existingProduct.ImageUrl = product.ImageUrl;
+            existingProduct.Description = product.Description;
+            existingProduct.LensColor = product.LensColor;
+            existingProduct.FrameColor = product.FrameColor;
+            existingProduct.FrameType = product.FrameType;
+            existingProduct.Price = product.Price;
+            existingProduct.UVProtection = product.UVProtection;
+            existingProduct.Gender = product.Gender;
+            existingProduct.PromotionId = product.PromotionId;
+
+            if (existingProduct.PromotionId != null)
             {
-                existingProduct.Model = product.Model;
-                existingProduct.Brand = product.Brand;
-                existingProduct.Category = product.Category;
-                existingProduct.ImageUrl = product.ImageUrl;
-                existingProduct.Description = product.Description;
-                existingProduct.LensColor = product.LensColor;
-                existingProduct.FrameColor = product.FrameColor;
-                existingProduct.FrameType = product.FrameType;
-                existingProduct.Price = product.Price;
-                existingProduct.UVProtection = product.UVProtection;
-                existingProduct.Gender = product.Gender;
-                existingProduct.PromotionId = product.PromotionId;
-               
-
+                var promotion = await _context.Promotions.FindAsync(existingProduct.PromotionId);
+                existingProduct.PromoPrice = existingProduct.Price - (existingProduct.Price * promotion!.DiscountPercentage / 100);
             }
+            else existingProduct.PromoPrice = null;
 
-            await _context.SaveChangesAsync();
+            
             
         }
 

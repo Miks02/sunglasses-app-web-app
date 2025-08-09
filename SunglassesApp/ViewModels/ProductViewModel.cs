@@ -27,6 +27,7 @@ namespace SunglassesApp.ViewModels
         [Range(0.01, double.MaxValue, ErrorMessage = "Cena mora biti veća od 0.")]
         public decimal? Price { get; set; }
 
+        public decimal? PromoPrice { get; set; }
         
         [Required(ErrorMessage = "Izaberite tip okvira")]
         public FrameType? FrameType { get; set; }

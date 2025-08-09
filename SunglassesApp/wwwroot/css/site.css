@@ -176,4 +176,10 @@ body {
 
 .form-select {
   max-width: 200px;
+}
+
+.product-image {
+  max-height: 400px;
+  -o-object-fit: cover;
+     object-fit: cover;
 }/*# sourceMappingURL=site.css.map */

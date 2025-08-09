@@ -149,6 +149,8 @@ namespace SunglassesApp.Controllers
                 await product.ImageFile.CopyToAsync(fileStream);
             }
 
+          
+
             var updatedProduct = new Product
             {
                 Id = product.Id,
@@ -163,8 +165,11 @@ namespace SunglassesApp.Controllers
                 Description = product.Description,
                 Gender = product.Gender,
                 ImageUrl = "/images/" + uniqueFileName,
-                PromotionId = product.PromotionId
+                PromotionId = product.PromotionId,
+
+
             };
+           
 
             try
             {

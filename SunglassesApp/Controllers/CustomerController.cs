@@ -50,5 +50,33 @@ namespace SunglassesApp.Controllers
 
             return View(promotionList);
         }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ProductDetails(int id)
+        {
+            var product = await _productRepository.Get(id);
+
+            if (product == null) return View("Index");
+
+            var viewModel = new ProductViewModel
+            {
+                Model = product.Model,
+                Brand = product.Brand,
+                Price = product.Price,
+                PromoPrice = product.PromoPrice,
+                FrameColor = product.FrameColor,
+                FrameType = product.FrameType,
+                LensColor = product.LensColor,
+                Category = product.Category,
+                Gender = product.Gender,
+                UVProtection = product.UVProtection,
+                PromotionId = product.PromotionId,
+                Description = product.Description,
+                ImageUrl = product.ImageUrl,
+                Promotion = product.Promotion
+            };
+
+            return View(viewModel);
+        }
     }
 }

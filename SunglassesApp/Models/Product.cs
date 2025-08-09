@@ -10,12 +10,14 @@ namespace SunglassesApp.Models
         public string ImageUrl { get; set; } = null!;
         public string Name { get { return $"{Brand} {Model}"; } } 
         public decimal? Price { get; set; }
-    
+        public decimal? PromoPrice { get; set; }
         public FrameType? FrameType { get; set; } 
         public LensColor? LensColor { get; set; } 
         public FrameColor? FrameColor { get; set; } 
         public Category? Category { get; set; } 
         public UVProtection? UVProtection { get; set; } 
+
+
 
         public Gender? Gender { get; set; }
 
