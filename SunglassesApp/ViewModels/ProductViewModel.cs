@@ -55,5 +55,12 @@ namespace SunglassesApp.ViewModels
 
         public List<SelectListItem>? PromotionsList { get; set; }
 
+        public int? UserRatingId { get; set; }
+
+        public float? UserRating { get; set; }
+
+        public float? AverageRating { get; set; }
+
+
     }
 }

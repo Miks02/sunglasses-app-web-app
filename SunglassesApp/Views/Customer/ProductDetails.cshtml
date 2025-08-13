@@ -14,102 +14,31 @@
 
     var currentUser = await UserManager.GetUserAsync(User);
     string currUserId = "";
+    bool rateEdit = false;
+    int ratingsCount = Model.Ratings?.Count() ?? 0;
+
+    if(Model.ProductVm?.UserRating != null)
+    {
+        rateEdit = true;
+    }
+
     if(currentUser != null)
     {
         currUserId = currentUser!.Id;
     }
-   
+
 
 
 }
-<style>
-    .comment-section {
-        max-width: 800px;
-        margin: 2rem auto;
-        padding: 20px;
-        background: #f8f9fa;
-        border-radius: 15px;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-    }
 
-    .comment-box {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-        transition: transform 0.2s;
-        border: 1px solid #e9ecef;
-    }
-
-        .comment-box:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-    .user-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .comment-input {
-        border-radius: 20px;
-        padding: 15px 20px;
-        border: 2px solid #e9ecef;
-        transition: all 0.3s;
-    }
-
-        .comment-input:focus {
-            box-shadow: none;
-            border-color: #86b7fe;
-        }
-
-    .btn-comment {
-        border-radius: 20px;
-        padding: 8px 25px;
-        background: #0d6efd;
-        border: none;
-        transition: all 0.3s;
-    }
-
-        .btn-comment:hover {
-            background: #0b5ed7;
-            transform: translateY(-1px);
-        }
-
-    .comment-actions {
-        font-size: 0.9rem;
-    }
-
-        .comment-actions a {
-            color: #6c757d;
-            text-decoration: none;
-            margin-right: 15px;
-            transition: color 0.2s;
-        }
-
-            .comment-actions a:hover {
-                color: #0d6efd;
-            }
-
-    .comment-time {
-        color: #adb5bd;
-        font-size: 0.85rem;
-    }
-
-    .reply-section {
-        margin-left: 60px;
-        border-left: 2px solid #e9ecef;
-        padding-left: 20px;
-    }
-</style>
 
     <div class="row bg-light p-5 w-100 min-vh-100 m-auto">
        
         
         <div class="col-md-6 mb-4">
             <img src="@Model.ProductVm!.ImageUrl" alt="Product" class="img-fluid rounded w-100 product-image h-100" id="mainImage">
+        
+        
         </div>
 
         <div class="col-md-6">
@@ -139,7 +68,7 @@
             <div class="mb-3">
                 <i class="bi bi-star-fill text-warning"></i>
                
-                <span class="ms-2">4.5 (120 recenzija)</span>
+                <span class="ms-2">@Model.ProductVm.AverageRating (@ratingsCount recenzija)</span>
             </div>
             <p class="mb-4">
             @Model.ProductVm.Description
@@ -153,17 +82,7 @@
                 <i class="bi bi-cart-plus"></i> Dodaj u korpu
             </button>
 
-            <div class="mt-4">
-                <h5>Specifikacije:</h5>
-                <ul>
-                <li>Kategorija: @Model.ProductVm.Category?.GetDisplayName()</li>
-                <li>Pol: @Model.ProductVm.Gender?.GetDisplayName()</li>
-                <li>Oblik okvira: @Model.ProductVm.FrameType?.GetDisplayName()</li>
-                <li>Boja okvira: @Model.ProductVm.FrameColor?.GetDisplayName()</li>
-                <li>Boja stakala: @Model.ProductVm.LensColor?.GetDisplayName()</li>
-                <li>UV zaštita: @Model.ProductVm.UVProtection?.GetDisplayName()</li>
-                </ul>
-            </div>
+            
         </div>
         
             
@@ -172,17 +91,44 @@
 
         <div class="container">
             <div class="comment-section">
-                <!-- New Comment Form -->
                 <h2 class="text-warning fw-bolder text-center ">Komentari kupaca</h2>
                 
 
             @if (User.IsInRole("User") && SignInManager.IsSignedIn(User))
             {
+                <div class="col-md-6 d-flex justify-content-center w-100">
+                    <div class="rating-card p-4">
+                        <form id="ratingForm" asp-controller="Rating" asp-action="Rate" method="post">
+                            <input type="hidden" name="id" value="@Model.ProductVm.UserRatingId" />
+                            <input type="hidden" name="isEdit" value="@(rateEdit ? "true" : "false")" />
+                            <input type="hidden" name="productId" value="@Model.ProductVm.Id" />
+                            <input type="hidden" name="userId" value="@currUserId" />
+                            <div class="star-rating animated-stars">
+                                @for (int i = 5; i >= 1; i--)
+                                {
+                                    <input type="radio" id="star-@i" name="value" value="@i" class="d-none" />
+                                    <label for="star-@i" class="bi bi-star-fill" style="cursor:pointer"></label>
+                                }
+                            </div>
+                        </form>
+                        <p class="text-muted mt-2">Ocenite proizvod</p>
+                    </div>
+                </div>
+
+        
+                
 
                 <div class="mb-4">
                     <div class="d-flex gap-3  flex-column">
                         <div class="d-block fw-bolder text-success">
                             <span class="p-1 rounded-3">@User.Identity?.Name</span>
+                            <div class="star-rating">
+                                @for (int i = 0; i < Model.ProductVm.UserRating; i++)
+                                {
+                                    <i class="bi bi-star-fill"></i>
+                                }
+
+                            </div>
                         </div>
                         <div class="flex-grow-1">
                             
@@ -227,7 +173,13 @@
                                     {
                                         <h6 class="mb-0">@c.User.UserName</h6>
                                     }
+
                                     
+                                    
+                                        
+                                    
+
+                                   
 
                                     <span class="comment-time">@c.AddedAt</span>
                                 </div>
@@ -267,6 +219,16 @@
         </div>
 
     </div>
+
+<script>
+    document.querySelectorAll('.star-rating label').forEach(function(label) {
+        label.addEventListener('click', function() {
+            var starId = this.getAttribute('for');
+            document.getElementById(starId).checked = true;
+            document.getElementById('ratingForm').submit();
+        });
+    });
+</script>
 
 
 
