@@ -9,7 +9,9 @@
     Layout = "_Layout";
 
     var products = Model.ToList();
-    
+
+    var productBrands = products.Select(p => p.Brand).Distinct();
+
     var productCategories = EnumExtensions.GetDisplayNames<Category>();
     var productFrameTypes = EnumExtensions.GetDisplayNames<FrameType>();
     var productFrameColors = EnumExtensions.GetDisplayNames<FrameColor>();
@@ -38,84 +40,109 @@
           
             <div class="col-lg-3">
                 <div class="filter-sidebar p-4 shadow-sm">
+                <form method="get" asp-controller="Customer" asp-action="Index">
                     <div class="filter-group">
+
                         <h6 class="mb-3">Kategorije</h6>
-                    @foreach(var category in productCategories)
-                    {
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="electronics">
-                            <label class="form-check-label" for="electronics">
-                                @category
-                            </label>
-                        </div>
-                    }
+                        @foreach (var filter in Enum.GetValues(typeof(Category)))
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="cat-@filter" name="Categories" value="@((int)filter)">
+                                <label class="form-check-label" for="cat-@filter">
+                                    @EnumExtensions.GetDisplayName((Category)filter)
+                                </label>
+                            </div>
+                        }
 
                     </div>
-
-                <div class="filter-group">
-                    <h6 class="mb-3">Oblik</h6>
-                    @foreach (var filter in productFrameTypes)
-                    {
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="electronics">
-                            <label class="form-check-label" for="electronics">
-                                @filter
-                            </label>
-                        </div>
-                    }
-
-                </div>
-
-                <div class="filter-group">
-                    <h6 class="mb-3">Boja okvira</h6>
-                    @foreach (var filter in productFrameColors)
-                    {
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="electronics">
-                            <label class="form-check-label" for="electronics">
-                                @filter
-                            </label>
-                        </div>
-                    }
-
-                </div>
-
-                <div class="filter-group">
-                    <h6 class="mb-3">Boja stakala</h6>
-                    @foreach (var filter in productLensColors)
-                    {
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="electronics">
-                            <label class="form-check-label" for="electronics">
-                                @filter
-                            </label>
-                        </div>
-                    }
-
-                </div>
-
-                <div class="filter-group">
-                    <h6 class="mb-3">UV Zaštita</h6>
-                    @foreach (var filter in productUv)
-                    {
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="electronics">
-                            <label class="form-check-label" for="electronics">
-                                @filter
-                            </label>
-                        </div>
-                    }
-
-                </div>
 
                     <div class="filter-group">
-                        <h6 class="mb-3">Cenovni opseg</h6>
-                        <input type="range" class="form-range" min="0" max="100000" value="50000">
-                        <div class="d-flex justify-content-between">
-                            <span class="text-muted">0 RSD</span>
-                            <span class="text-muted">100000 RSD</span>
-                        </div>
+
+                        <h6 class="mb-3">Brend</h6>
+                        @foreach (var brand in productBrands)
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="@brand" name="Brands" value="@brand">
+                                <label class="form-check-label" for="@brand">
+                                    @brand
+                                </label>
+                            </div>
+                        }
+
                     </div>
+
+                    <div class="filter-group">
+
+                        <h6 class="mb-3">Pole</h6>
+                        @foreach (var filter in Enum.GetValues(typeof(Gender)))
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="cat-@filter" name="Genders" value="@((int)filter)">
+                                <label class="form-check-label" for="cat-@filter">
+                                    @EnumExtensions.GetDisplayName((Gender)filter)
+                                </label>
+                            </div>
+                        }
+
+                    </div>
+
+                    <div class="filter-group">
+                        <h6 class="mb-3">Oblik</h6>
+                        @foreach (var filter in Enum.GetValues(typeof(FrameType)))
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="cat-@filter" name="FrameTypes" value="@((int)filter)">
+                                <label class="form-check-label" for="cat-@filter">
+                                    @EnumExtensions.GetDisplayName((FrameType)filter)
+                                </label>
+                            </div>
+                        }
+
+                    </div>
+
+                    <div class="filter-group">
+                        <h6 class="mb-3">Boja okvira</h6>
+                        @foreach (var filter in Enum.GetValues(typeof(FrameColor)))
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="FrameColors" value="@((int)filter)">
+                                <label class="form-check-label" for="cat-@filter">
+                                    @EnumExtensions.GetDisplayName((FrameColor)filter)
+                                </label>
+                            </div>
+                        }
+
+                    </div>
+
+                    <div class="filter-group">
+                        <h6 class="mb-3">Boja stakala</h6>
+                        @foreach (var filter in Enum.GetValues(typeof(LensColor)))
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="cat-@filter" name="LensColors" value="@((int)filter)">
+                                <label class="form-check-label" for="cat-@filter">
+                                    @EnumExtensions.GetDisplayName((LensColor)filter)
+                                </label>
+                            </div>
+                        }
+
+                    </div>
+
+                    <div class="filter-group">
+                        <h6 class="mb-3">UV Zaštita</h6>
+                        @foreach (var filter in Enum.GetValues(typeof(UVProtection)))
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="cat-@filter" name="UVProtection" value="@((int)filter)">
+                                <label class="form-check-label" for="cat-@filter">
+                                    @EnumExtensions.GetDisplayName((UVProtection)filter)
+                                </label>
+                            </div>
+                        }
+
+                    </div>
+
+   
 
                     @* <div class="filter-group">
                         <h6 class="mb-3">Colors</h6>
@@ -144,6 +171,8 @@
                     </div> *@
 
                     <button class="btn btn-outline-primary w-100">Primeni filtere</button>
+                </form>
+                    
                 </div>
             </div>
 

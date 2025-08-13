@@ -2,12 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SunglassesApp.Data.Repositories.Interfaces;
-using System.Threading.Tasks;
 using SunglassesApp.ViewModels;
 using SunglassesApp.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Reflection.Metadata.Ecma335;
-using System.Linq;
+using SunglassesApp.Helpers;
+
 
 namespace SunglassesApp.Controllers
 {
@@ -38,34 +37,55 @@ namespace SunglassesApp.Controllers
             _userManager = userManager;
             _logger = logger;
         }
+        // Fix for CS1737: Move optional parameter 'page' after required parameters.
+        // Fix for IDE0060: Remove unused parameter 'page' if not used in method body.
+
         [AllowAnonymous]
-        public async Task<IActionResult> Index(string sortOrder, int page = 1)
+        public async Task<IActionResult> Index(string sortOrder, FilterViewModel filter, int page = 1)
         {
-            var promotions = _productRepository.GetAll();
+            var products = _productRepository.GetAll();
+
+            if (filter.Categories != null && filter.Categories.Count > 0)
+                products = products.Where(p => filter.Categories.Contains((int)p.Category!));
+            if (filter.FrameColors != null && filter.FrameColors.Count > 0)
+                products = products.Where(p => filter.FrameColors.Contains((int)p.FrameColor!));
+
+            if (filter.FrameTypes != null && filter.FrameTypes.Count > 0)
+                products = products.Where(p => filter.FrameTypes.Contains((int)p.FrameType!));
+
+            if (filter.LensColors != null && filter.LensColors.Count > 0)
+                products = products.Where(p => filter.LensColors.Contains((int)p.LensColor!));
+
+            if (filter.Genders != null && filter.Genders.Count > 0)
+                products = products.Where(p => filter.Genders.Contains((int)p.Gender!));
+
+            if (filter.UVProtections != null && filter.UVProtections.Count > 0)
+                products = products.Where(p => filter.UVProtections.Contains((int)p.UVProtection!));
+            if(filter.Brands != null && filter.Brands.Count > 0)
+                products = products.Where(p => filter.Brands.Contains(p.Brand));
+
 
             switch (sortOrder)
             {
                 case "price_asc":
-                    promotions = promotions.OrderBy(p => p.Price);
+                    products = products.OrderBy(p => p.Price);
                     break;
                 case "price_desc":
-                    promotions = promotions.OrderByDescending(p => p.Price);
+                    products = products.OrderByDescending(p => p.Price);
                     break;
                 case "times_bought":
-                    promotions = promotions.OrderBy(p => p.TimesBought);
+                    products = products.OrderBy(p => p.TimesBought);
                     break;
                 case "default":
-                    promotions = promotions.OrderBy(p => p.Id);
+                    products = products.OrderBy(p => p.Id);
                     break;
-
             }
 
             ViewBag.CurrentSort = sortOrder;
 
-            var promotionList = await promotions.ToListAsync();
+            var productList = await products.ToListAsync();
 
-
-            return View(promotionList);
+            return View(productList);
         }
 
         [AllowAnonymous]

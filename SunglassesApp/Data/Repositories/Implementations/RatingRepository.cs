@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SunglassesApp.Data.Repositories.Interfaces;
 using SunglassesApp.Models;
+using System.Threading.Tasks;
 
 namespace SunglassesApp.Data.Repositories.Implementations
 {
