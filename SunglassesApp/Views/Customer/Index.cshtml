@@ -39,7 +39,7 @@
         <div class="row g-4">
           
             <div class="col-lg-3">
-                <div class="filter-sidebar p-4 shadow-sm">
+                <div class="filter-sidebar p-4 shadow-sm h-100 overflow-scroll position-static">
                 <form method="get" asp-controller="Customer" asp-action="Index">
                     <div class="filter-group">
 
@@ -73,7 +73,7 @@
 
                     <div class="filter-group">
 
-                        <h6 class="mb-3">Pole</h6>
+                        <h6 class="mb-3">Pol</h6>
                         @foreach (var filter in Enum.GetValues(typeof(Gender)))
                         {
                             <div class="form-check mb-2">

@@ -37,8 +37,6 @@ namespace SunglassesApp.Controllers
             _userManager = userManager;
             _logger = logger;
         }
-        // Fix for CS1737: Move optional parameter 'page' after required parameters.
-        // Fix for IDE0060: Remove unused parameter 'page' if not used in method body.
 
         [AllowAnonymous]
         public async Task<IActionResult> Index(string sortOrder, FilterViewModel filter, int page = 1)

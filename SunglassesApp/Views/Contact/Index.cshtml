@@ -1,0 +1,64 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager;
+
+@{
+    Layout = "_Layout";
+    var currUser = await UserManager.GetUserAsync(User);
+
+    var FirstName = currUser!.FirstName;
+    var LastName = currUser.LastName;
+    var userId = currUser.Id;
+}
+
+
+<section id="contact" class="py-5 container bg-dark my-2 rounded-3 shadow">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6 text-center">
+                <h2 class="mt-0 text-info">Kontakt stranica</h2>
+                <hr class="divider" />
+                <p class="text-info fw-bolder mb-5">
+                    Imate dodatnih pitanja u vezi nekog proizvoda? Kontaktirajte nas i mi ćemo vam odgovoriti
+                    u najkraćem mogućem roku
+                </p>
+            </div>
+        </div>
+        <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+            <div class="col-lg-6">
+                
+                <form asp-controller="Contact" asp-action="SendTicket" asp-route-userId="@userId" method="post">
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="FirstName" name="FirstName" type="text" value="@FirstName" disabled />
+                        <label for="FirstName">Ime</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="LastName" name="LastName" type="text" value="@LastName" disabled />
+                        <label for="LastName">Prezime</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="LastName" name="subject" type="text" required/>
+                        <label for="LastName">Naslov</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" id="message" name="message" type="text" style="height: 10rem" required></textarea>
+                        <label for="message">Poruka</label>
+                    </div>
+                    <div class="d-grid"><button class="btn btn-primary btn-xl" type="submit">Pošalji upit</button></div>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success text-center fixed-top alert-dismissible mt-3 fade show" role="alert">
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger text-center fixed-top alert-dismissible mt-3 fade show">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

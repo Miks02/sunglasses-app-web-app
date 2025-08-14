@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SunglassesApp.Models;
+using System.Reflection.Emit;
 
 namespace SunglassesApp.Data
 {
@@ -16,14 +17,28 @@ namespace SunglassesApp.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<Rating> Ratings { get; set; }
-        public DbSet<Message> Messages { get; set; }
+        public DbSet<SupportTicket> SupportTickets { get; set; }
+
+        public DbSet<SupportTicketMessage> SupportTicketMessages { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
+
+            builder.Entity<SupportTicketMessage>()
+                .HasOne(m => m.Ticket)
+                .WithMany(t => t.Messages)
+                .HasForeignKey(m => m.TicketId)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            builder.Entity<SupportTicketMessage>()
+                .HasOne(m => m.Sender)
+                .WithMany()
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
             var userRoleId = "38ba0b14-cd93-4e0f-a74f-b1080e7e4c48";
             var adminRoleId = "218f1a02-f071-4468-b646-48a24e11e1d8";
             

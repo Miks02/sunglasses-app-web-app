@@ -14,7 +14,7 @@ namespace SunglassesApp.Controllers
         private IRatingRepository _ratingRepository;
         private ILogger<RatingController> _logger;
         public RatingController(IRatingRepository ratingRepository, ILogger<RatingController> logger)
-        {
+        { 
             _ratingRepository = ratingRepository;
             _logger = logger;
         }

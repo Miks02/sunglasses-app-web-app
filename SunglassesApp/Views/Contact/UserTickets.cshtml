@@ -1,0 +1,62 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<SupportTicket>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center fixed-top alert-dismissible mt-3 fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger text-center fixed-top alert-dismissible mt-3 fade show">
+        @TempData["ErrorMessage"]
+    </div>
+}
+<div class="container my-5 bg-light shadow rounded-3 pb-1">
+    <h2 class="mb-4 pt-2">📩 Moji poslati tiketi</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Trenutno nemaš nijedan poslat tiket.
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Naslov</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Datum slanja</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ticket in Model)
+                {
+                    <tr onclick="window.location.href='@Url.Action("TicketDetails", "Contact", new { id = ticket.Id })'" style="cursor:pointer;">
+                        <th scope="row">@ticket.Id</th>
+                        <td>@ticket.Subject</td>
+                        <td>
+                            @if (ticket.isResolved == false)
+                            {
+                                <span class="badge bg-warning text-dark">Otvoren</span>
+                            }
+                            else if (ticket.isResolved == true)
+                            {
+                                <span class="badge bg-success">Zatvoren</span>
+                            }
+                           
+                        </td>
+                        <td>@ticket.SentAt.ToString("dd.MM.yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+    }
+</div>

@@ -1,0 +1,54 @@
+﻿@using SunglassesApp.Models
+@{
+    Layout = "_AdminLayout";
+}
+
+@model IEnumerable<SupportTicket>
+
+<div class="container my-5 dark-gradient text-light shadow rounded-3 pb-1">
+    <h2 class="mb-4 mt-4 pt-2">📩 Korisnički tiketi</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Trenutno nema poslatih tiketa
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Korisnik</th>
+                    <th scope="col">Naslov</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Datum slanja</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ticket in Model)
+                {
+                    <tr class="text-light" onclick="window.location.href='@Url.Action("TicketDetails", "Ticket", new { area = "Admin", id = ticket.Id })'" style="cursor:pointer;">
+                        <th scope="row">@ticket.Sender.UserName</th>
+                        <td>@ticket.Subject</td>
+                        <td>
+                            @if (ticket.isResolved == false)
+                            {
+                                <span class="badge bg-warning text-dark">Otvoren</span>
+                            }
+                            else if (ticket.isResolved == true)
+                            {
+                                <span class="badge bg-success">Zatvoren</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">@ticket.isResolved</span>
+                            }
+                        </td>
+                        <td>@ticket.SentAt.ToString("dd.MM.yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

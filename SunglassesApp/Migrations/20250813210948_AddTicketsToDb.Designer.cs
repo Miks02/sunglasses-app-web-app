@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SunglassesApp.Data;
 
@@ -11,9 +12,11 @@ using SunglassesApp.Data;
 namespace SunglassesApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250813210948_AddTicketsToDb")]
+    partial class AddTicketsToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,7 +263,7 @@ namespace SunglassesApp.Migrations
                         {
                             Id = "80c32529-9d23-4d53-a0b3-89c710f5fd96",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a73695db-598d-444d-8178-3ae8f4c1ec58",
+                            ConcurrencyStamp = "3be2ac06-09f4-45f8-a2fd-f4da67b231bd",
                             Email = "test@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "FirstName",
@@ -268,9 +271,9 @@ namespace SunglassesApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST@GMAIL.COM",
                             NormalizedUserName = "USER35",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGwJXrCC8pB94xAaSHFLVIoSqqKTEEOFy3f+V3XqaxJMuzGb0NoRKcmP+7xpielifQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHN7MzHRQOc0mW5/fc9lZsy+mqoMUuujRQEFUr6aOq/p4ylv643Yk32K6TYhZKMpEQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "78271570-d9a9-4486-906e-ffc61fee67d5",
+                            SecurityStamp = "a1dc6801-af65-4ee0-8fd8-d4aa92f03da2",
                             TwoFactorEnabled = false,
                             UserName = "user35"
                         },
@@ -278,7 +281,7 @@ namespace SunglassesApp.Migrations
                         {
                             Id = "e1976e68-c98a-46f6-9f1e-c0a87ef94609",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6a733402-dd68-4069-a8c6-cb35910232ae",
+                            ConcurrencyStamp = "c72e3c55-ea3d-4901-bbaa-a1b4d8613226",
                             Email = "admin02@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -286,9 +289,9 @@ namespace SunglassesApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN02@GMAIL.COM",
                             NormalizedUserName = "ADMIN02",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEZlRXqv7xgbsSwlae6UclDrejOZ+BI/f7lcl1bZu3xnVz70tryrAIUWUYOZK92/9Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKIldiVSLTeKXxEdNlfz0Cej9LpBjJ5dCR5dzadP5y4hEDUDyFFI8NX24RvlUZ49SA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c7990905-d7e7-47b6-bdc0-23fd6b9ee7e0",
+                            SecurityStamp = "5f484402-09a9-46a1-ae11-33c03c3abd59",
                             TwoFactorEnabled = false,
                             UserName = "Admin02"
                         });
@@ -504,6 +507,10 @@ namespace SunglassesApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SenderId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -523,40 +530,6 @@ namespace SunglassesApp.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("SupportTickets");
-                });
-
-            modelBuilder.Entity("SunglassesApp.Models.SupportTicketMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsFromAdmin")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SenderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("SentAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SenderId");
-
-                    b.HasIndex("TicketId");
-
-                    b.ToTable("SupportTicketMessages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -698,25 +671,6 @@ namespace SunglassesApp.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("SunglassesApp.Models.SupportTicketMessage", b =>
-                {
-                    b.HasOne("SunglassesApp.Models.ApplicationUser", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SunglassesApp.Models.SupportTicket", "Ticket")
-                        .WithMany("Messages")
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Sender");
-
-                    b.Navigation("Ticket");
-                });
-
             modelBuilder.Entity("SunglassesApp.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Comments");
@@ -743,11 +697,6 @@ namespace SunglassesApp.Migrations
             modelBuilder.Entity("SunglassesApp.Models.Promotion", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("SunglassesApp.Models.SupportTicket", b =>
-                {
-                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,102 @@
+﻿
+@{
+    Layout = "_AdminLayout";
+}
+
+@using SunglassesApp.ViewModels
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model TicketDetailsViewModel
+
+<div class="container my-5">
+    <a asp-area="Admin"  asp-controller="Ticket" asp-action="Index" class="btn btn-outline-light mb-3">
+        ← Nazad na listu tiketa
+    </a>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">🎫 @Model.Title</h5>
+            <small>
+                <div >
+                    <div class="d-flex justify-content-between">
+                        
+                        @if (Model.IsResolved == false)
+                        {
+                             <span class="badge bg-warning text-dark p-2 fs-6 m-1">Otvoren</span>
+                                <form class="d-flex justify-content-end" asp-area="Admin" asp-controller="Ticket" asp-action="MarkAsResolved" asp-route-id="@Model.Id" method="POST">
+                                    <button type="submit" class="btn btn-secondary">Zatvori tiket</button>
+                                </form>
+                            
+                        }
+                        else if (Model.IsResolved == true)
+                        {
+                             <span class="badge bg-success text-light p-2 fs-6 m-1">Zatvoren</span>
+                            
+
+                        }
+                    </div>
+                    
+                </div>
+            </small>
+        </div>
+
+        <div class="card-body" style="max-height: 500px; overflow-y: auto; background-color: #f8f9fa;">
+            @foreach (var message in Model.Messages)
+            {
+                <div class="mb-3">
+                    @if (message.IsFromAdmin)
+                    {
+                        <div class="p-3 bg-primary text-white rounded-3" style="max-width: 70%; margin-left:auto;">
+                            <strong>Admin:</strong> @message.Content
+                            <div class="text-end">
+                                <small class="text-light">@message.SentAt.ToString("dd.MM.yyyy HH:mm")</small>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-3 bg-light border rounded-3" style="max-width: 70%;">
+                            <strong>@Model.Sender.UserName:</strong> @message.Content
+                            <div class="text-end">
+                                <small class="text-muted">@message.SentAt.ToString("dd.MM.yyyy HH:mm")</small>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        @if (Model.IsResolved == false)
+        {
+            <div class="card-footer">
+                <form asp-area="Admin" asp-controller="Ticket" asp-action="SendMessage" asp-route-ticketId="@Model.Id" method="POST">
+
+                    <div class="input-group">
+                        <input type="text" name="message" class="form-control" placeholder="Unesi poruku..." required />
+                        <button class="btn btn-primary" type="submit">Pošalji</button>
+                    </div>
+                </form>
+                
+            </div>
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success text-center fixed-top alert-dismissible mt-3 fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger text-center fixed-top alert-dismissible mt-3 fade show">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+        }
+        else
+        {
+            <div class="card-footer text-danger text-center">
+                Ovaj tiket je zatvoren.
+            </div>
+        }
+    </div>
+</div>

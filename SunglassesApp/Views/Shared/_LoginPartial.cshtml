@@ -3,12 +3,36 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+@{
+    var currUser = await UserManager.GetUserAsync(User);
+    var currUserId = "";
+    if(currUser != null)
+        currUserId = currUser.Id;
+}
+
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a  class="nav-link text-light" asp-area="Admin" asp-controller="Product" asp-action="Index" title="Manage">Pozdrav @User.Identity?.Name!</a>
-    </li>
+        @if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="Admin" asp-controller="Product" asp-action="Index" title="Manage">Pozdrav @User.Identity?.Name!</a>
+            </li>
+        }
+        else
+        {
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    @User.Identity?.Name!
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item  " href="#">Pregled porudzbina</a></li>
+                    <li><a class="dropdown-item " asp-action="UserTickets" asp-controller="Contact" asp-route-id="@currUserId">Pregled tiketa</a></li>
+                    
+                </ul>
+            </div>
+        }
+
     <li class="nav-item">
         <form  class="form-inline" asp-controller="Account" asp-action="Logout">
             <button  type="submit" class="nav-link btn btn-link text-light">Odjava</button>
