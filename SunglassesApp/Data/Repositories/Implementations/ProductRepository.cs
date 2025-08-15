@@ -75,6 +75,11 @@ namespace SunglassesApp.Data.Repositories.Implementations
             
         }
 
+        public async Task<IEnumerable<string>> GetBrands()
+        {
+            return await _context.Products.Select(p => p.Brand).Distinct().ToListAsync();
+        }
+
         public async Task ClearPromotions(int id)
         {
 

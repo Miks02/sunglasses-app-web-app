@@ -1,31 +1,78 @@
 ﻿@using SunglassesApp.Models;
 @using SunglassesApp.Helpers;
+@using SunglassesApp.ViewModels;
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-@model IEnumerable<SunglassesApp.Models.Product>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model CatalogueViewModel
 
 @{
     Layout = "_Layout";
 
-    var products = Model.ToList();
-
-    var productBrands = products.Select(p => p.Brand).Distinct();
-
-    var productCategories = EnumExtensions.GetDisplayNames<Category>();
-    var productFrameTypes = EnumExtensions.GetDisplayNames<FrameType>();
-    var productFrameColors = EnumExtensions.GetDisplayNames<FrameColor>();
-    var productLensColors = EnumExtensions.GetDisplayNames<LensColor>();
-    var productUv = EnumExtensions.GetDisplayNames<UVProtection>();
+    var products = Model.Products.ToList();
 
 }
 
 
 <div class="container-fluid p-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
+            
             <h4 class="mb-0 text-light">Pregled kataloga</h4>
             <div class="d-flex gap-2 align-items-center">
-                <form method="get" asp-controller="Customer" asp-action="Index" class="d-flex justify-content-end">
+                <form method="get" asp-controller="Customer" asp-action="Index" asp-route-filter="@Model.Filter" class="d-flex justify-content-end">
+                @if (Model.Filter.Categories != null)
+                {
+                    foreach (var cat in Model.Filter.Categories)
+                    {
+                        <input type="hidden" name="Categories" value="@cat" />
+                    }
+                }
+                @if (Model.Filter.Brands != null)
+                {
+                    foreach (var brand in Model.Filter.Brands)
+                    {
+                        <input type="hidden" name="Brands" value="@brand" />
+                    }
+                }
+                @if (Model.Filter.Genders != null)
+                {
+                    foreach (var gender in Model.Filter.Genders)
+                    {
+                        <input type="hidden" name="Genders" value="@gender" />
+                    }
+                }
+                @if (Model.Filter.FrameTypes != null)
+                {
+                    foreach (var frameType in Model.Filter.FrameTypes)
+                    {
+                        <input type="hidden" name="FrameTypes" value="@frameType" />
+                    }
+                }
+                @if (Model.Filter.FrameColors != null)
+                {
+                    foreach (var frameColor in Model.Filter.FrameColors)
+                    {
+                        <input type="hidden" name="FrameColors" value="@frameColor" />
+                    }
+                }
+                @if (Model.Filter.LensColors != null)
+                {
+                    foreach (var lensColor in Model.Filter.LensColors)
+                    {
+                        <input type="hidden" name="LensColors" value="@lensColor" />
+                    }
+                }
+                @if (Model.Filter.UVProtections != null)
+                {
+                    foreach (var uv in Model.Filter.UVProtections)
+                    {
+                        <input type="hidden" name="UVProtections" value="@uv" />
+                    }
+                }
+
+
                 <select name="sortOrder" class="form-select rounded-3 shadow" onchange="this.form.submit()">
                     <option value="default" selected="@(ViewBag.CurrentSort == null || ViewBag.CurrentSort == "default")">Podrazumevano</option>
                     <option value="price_asc" selected="@(ViewBag.CurrentSort == "price_asc")">Cena rastuće</option>
@@ -40,14 +87,29 @@
           
             <div class="col-lg-3">
                 <div class="filter-sidebar p-4 shadow-sm h-100 overflow-scroll position-static">
-                <form method="get" asp-controller="Customer" asp-action="Index">
-                    <div class="filter-group">
+                <form method="get" asp-controller="Customer" asp-route-sortOrder="default" asp-action="Index">
+                    <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSort" />
 
+                    @if(!Model.Filter.IsEmpty)
+                    {
+                       
+                        <div class="d-flex justify-content-center w-100">
+                            <a class="btn btn-outline-success fw-bolder w-50 m-2" asp-controller="Customer" asp-action="Index">Resetuj filtere</a>
+                        </div>
+                    }
+
+                    <div class="filter-group">
+                        
                         <h6 class="mb-3">Kategorije</h6>
                         @foreach (var filter in Enum.GetValues(typeof(Category)))
                         {
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="cat-@filter" name="Categories" value="@((int)filter)">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="cat-@filter"
+                                       name="Categories"
+                                       value="@((int)filter)"
+                                       @(Model.Filter.Categories != null && Model.Filter.Categories.Contains((int)filter) ? "checked" : "")>
                                 <label class="form-check-label" for="cat-@filter">
                                     @EnumExtensions.GetDisplayName((Category)filter)
                                 </label>
@@ -59,10 +121,15 @@
                     <div class="filter-group">
 
                         <h6 class="mb-3">Brend</h6>
-                        @foreach (var brand in productBrands)
+                        @foreach (var brand in ViewBag.ProductBrands)
                         {
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="@brand" name="Brands" value="@brand">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="@brand"
+                                       name="Brands"
+                                       value="@brand"
+                                       @(Model.Filter.Brands != null && Model.Filter.Brands.Contains(brand) ? "checked" : "")>
                                 <label class="form-check-label" for="@brand">
                                     @brand
                                 </label>
@@ -77,8 +144,13 @@
                         @foreach (var filter in Enum.GetValues(typeof(Gender)))
                         {
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="cat-@filter" name="Genders" value="@((int)filter)">
-                                <label class="form-check-label" for="cat-@filter">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="gender-@filter"
+                                       name="Genders"
+                                       value="@((int)filter)"
+                                       @(Model.Filter.Genders != null && Model.Filter.Genders.Contains((int)filter) ? "checked" : "")>
+                                <label class="form-check-label" for="gender-@filter">
                                     @EnumExtensions.GetDisplayName((Gender)filter)
                                 </label>
                             </div>
@@ -91,8 +163,13 @@
                         @foreach (var filter in Enum.GetValues(typeof(FrameType)))
                         {
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="cat-@filter" name="FrameTypes" value="@((int)filter)">
-                                <label class="form-check-label" for="cat-@filter">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="frameType-@filter"
+                                       name="FrameTypes"
+                                       value="@((int)filter)"
+                                       @(Model.Filter.FrameTypes != null && Model.Filter.FrameTypes.Contains((int)filter) ? "checked" : "")>
+                                <label class="form-check-label" for="frameType-@filter">
                                     @EnumExtensions.GetDisplayName((FrameType)filter)
                                 </label>
                             </div>
@@ -105,8 +182,13 @@
                         @foreach (var filter in Enum.GetValues(typeof(FrameColor)))
                         {
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" name="FrameColors" value="@((int)filter)">
-                                <label class="form-check-label" for="cat-@filter">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="frameColor-@filter"
+                                       name="FrameColors"
+                                       value="@((int)filter)"
+                                       @(Model.Filter.FrameColors != null && Model.Filter.FrameColors.Contains((int)filter) ? "checked" : "")>
+                                <label class="form-check-label" for="frameColor-@filter">
                                     @EnumExtensions.GetDisplayName((FrameColor)filter)
                                 </label>
                             </div>
@@ -119,8 +201,13 @@
                         @foreach (var filter in Enum.GetValues(typeof(LensColor)))
                         {
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="cat-@filter" name="LensColors" value="@((int)filter)">
-                                <label class="form-check-label" for="cat-@filter">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="lensColor-@filter"
+                                       name="LensColors"
+                                       value="@((int)filter)"
+                                       @(Model.Filter.LensColors != null && Model.Filter.LensColors.Contains((int)filter) ? "checked" : "")>
+                                <label class="form-check-label" for="lensColor-@filter">
                                     @EnumExtensions.GetDisplayName((LensColor)filter)
                                 </label>
                             </div>
@@ -133,8 +220,13 @@
                         @foreach (var filter in Enum.GetValues(typeof(UVProtection)))
                         {
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="cat-@filter" name="UVProtection" value="@((int)filter)">
-                                <label class="form-check-label" for="cat-@filter">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="uv-@filter"
+                                       name="UVProtections"
+                                       value="@((int)filter)"
+                                       @(Model.Filter.UVProtections != null && Model.Filter.UVProtections.Contains((int)filter) ? "checked" : "")>
+                                <label class="form-check-label" for="uv-@filter">
                                     @EnumExtensions.GetDisplayName((UVProtection)filter)
                                 </label>
                             </div>
@@ -143,34 +235,10 @@
                     </div>
 
    
+                    <div class="d-flex justify-content-center w-100">
+                        <button class="btn btn-outline-primary w-50 fw-bolder">Primeni filtere</button>
 
-                    @* <div class="filter-group">
-                        <h6 class="mb-3">Colors</h6>
-                        <div class="d-flex gap-2">
-                            <div class="color-option selected" style="background: #000000;"></div>
-                            <div class="color-option" style="background: #dc2626;"></div>
-                            <div class="color-option" style="background: #2563eb;"></div>
-                            <div class="color-option" style="background: #16a34a;"></div>
-                        </div>
-                    </div> *@
-
-                    @* <div class="filter-group">
-                        <h6 class="mb-3">Rating</h6>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="rating" id="rating4">
-                            <label class="form-check-label" for="rating4">
-                                <i class="bi bi-star-fill text-warning"></i> 4 & above
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="rating" id="rating3">
-                            <label class="form-check-label" for="rating3">
-                                <i class="bi bi-star-fill text-warning"></i> 3 & above
-                            </label>
-                        </div>
-                    </div> *@
-
-                    <button class="btn btn-outline-primary w-100">Primeni filtere</button>
+                    </div>
                 </form>
                     
                 </div>
@@ -179,8 +247,8 @@
          
             <div class="col-lg-9">
                 <div class="row g-4">
-                    <!-- Product Card 1 -->
-                @foreach(var product in Model)
+               
+                @foreach(var product in Model.Products)
                 {
                     <div class="col-md-4">
                         <div class="product-card shadow-sm ">

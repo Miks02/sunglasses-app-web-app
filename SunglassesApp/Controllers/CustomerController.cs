@@ -43,7 +43,7 @@ namespace SunglassesApp.Controllers
         {
             var products = _productRepository.GetAll();
 
-            if (filter.Categories != null && filter.Categories.Count > 0)
+            if (filter!.Categories != null && filter.Categories.Count > 0)
                 products = products.Where(p => filter.Categories.Contains((int)p.Category!));
             if (filter.FrameColors != null && filter.FrameColors.Count > 0)
                 products = products.Where(p => filter.FrameColors.Contains((int)p.FrameColor!));
@@ -59,17 +59,19 @@ namespace SunglassesApp.Controllers
 
             if (filter.UVProtections != null && filter.UVProtections.Count > 0)
                 products = products.Where(p => filter.UVProtections.Contains((int)p.UVProtection!));
-            if(filter.Brands != null && filter.Brands.Count > 0)
+
+            if (filter.Brands != null && filter.Brands.Count > 0)
                 products = products.Where(p => filter.Brands.Contains(p.Brand));
+
 
 
             switch (sortOrder)
             {
                 case "price_asc":
-                    products = products.OrderBy(p => p.Price);
+                    products = products.OrderBy(p => p.PromoPrice ?? p.Price);
                     break;
                 case "price_desc":
-                    products = products.OrderByDescending(p => p.Price);
+                    products = products.OrderByDescending(p => p.PromoPrice ?? p.Price);
                     break;
                 case "times_bought":
                     products = products.OrderBy(p => p.TimesBought);
@@ -79,11 +81,24 @@ namespace SunglassesApp.Controllers
                     break;
             }
 
-            ViewBag.CurrentSort = sortOrder;
 
             var productList = await products.ToListAsync();
 
-            return View(productList);
+            var vm = new CatalogueViewModel
+            {
+                Products = productList,
+                Filter = filter
+            };
+
+            
+
+            ViewBag.CurrentSort = sortOrder;
+
+            var productBrands = await _productRepository.GetBrands();
+
+            ViewBag.ProductBrands = productBrands;
+
+            return View(vm);
         }
 
         [AllowAnonymous]
