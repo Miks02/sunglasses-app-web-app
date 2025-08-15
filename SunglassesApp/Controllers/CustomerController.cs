@@ -84,19 +84,21 @@ namespace SunglassesApp.Controllers
 
             var productList = await products.ToListAsync();
 
-            var vm = new CatalogueViewModel
-            {
-                Products = productList,
-                Filter = filter
-            };
-
-            
 
             ViewBag.CurrentSort = sortOrder;
 
             var productBrands = await _productRepository.GetBrands();
 
             ViewBag.ProductBrands = productBrands;
+
+            int pageSize = 6;
+
+            var paginatedProducts = PaginatedList<Product>.CreateAsync(products, page, pageSize);
+            var vm = new CatalogueViewModel
+            {
+                Products = await paginatedProducts,
+                Filter = filter
+            };
 
             return View(vm);
         }

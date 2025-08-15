@@ -20,7 +20,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             
             <h4 class="mb-0 text-light">Pregled kataloga</h4>
-            <div class="d-flex gap-2 align-items-center">
+            <div class="d-flex align-items-center">
                 <form method="get" asp-controller="Customer" asp-action="Index" asp-route-filter="@Model.Filter" class="d-flex justify-content-end">
                 @if (Model.Filter.Categories != null)
                 {
@@ -80,6 +80,7 @@
                     <option value="times_bought" selected="@(ViewBag.CurrentSort == "times_bought")">Najprodavaniji</option>
                 </select>
             </form>
+           
             </div>
         </div>
 
@@ -250,6 +251,7 @@
                
                 @foreach(var product in Model.Products)
                 {
+                    
                     <div class="col-md-4">
                         <div class="product-card shadow-sm ">
                             <div class="position-relative">
@@ -273,15 +275,17 @@
                             </div>
                             <div class="p-3">
                                 <span class="category-badge mb-2 d-inline-block">@product.Category!.GetDisplayName()</span>
-                                
-                                
-                                <div class=" mb-2 d-flex justify-content-between align-items-center">
-                                   
+                                <div class="mb-2 d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="mb-1">@product.Name</h6>
                                         <i class="rating-stars bi bi-star-fill"></i>
 
-                                        <span class="text-muted ms-2">(4.5)</span>
+                                        <span class="text-muted ms-2">
+                                            @{
+                                                var avgRating = product.Ratings.Any() ? product.Ratings.Average(r => r.Score) : 0;
+                                            }
+                                            @avgRating.ToString("0.0")
+                                        </span>
                                     </div>
 
                                     <div class="d-flex flex-column">
@@ -316,11 +320,130 @@
                             </div>
                         </div>
                     </div>
+
                 }
 
                    
 
                 </div>
+            @if (Model.Products is PaginatedList<Product> paged && paged.TotalPages > 1)
+            {
+                <nav aria-label="Product pagination">
+                    <ul class="pagination justify-content-center mt-4">
+                        <li class="page-item @(paged.HasPreviousPage ? "" : "disabled") btn-warning">
+                            <form method="get" asp-controller="Customer" asp-action="Index" class="d-inline">
+                        
+                                @foreach (var cat in Model.Filter.Categories ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="Categories" value="@cat" />
+                                }
+                                @foreach (var brand in Model.Filter.Brands ?? Enumerable.Empty<string>())
+                                {
+                                    <input type="hidden" name="Brands" value="@brand" />
+                                }
+                                @foreach (var gender in Model.Filter.Genders ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="Genders" value="@gender" />
+                                }
+                                @foreach (var frameType in Model.Filter.FrameTypes ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="FrameTypes" value="@frameType" />
+                                }
+                                @foreach (var frameColor in Model.Filter.FrameColors ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="FrameColors" value="@frameColor" />
+                                }
+                                @foreach (var lensColor in Model.Filter.LensColors ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="LensColors" value="@lensColor" />
+                                }
+                                @foreach (var uv in Model.Filter.UVProtections ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="UVProtections" value="@uv" />
+                                }
+                                <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSort" />
+                                <input type="hidden" name="page" value="@(paged.PageIndex - 1)" />
+                                <button class="page-link" type="submit" aria-label="Prethodna" tabindex="-1">&laquo;</button>
+                            </form>
+                        </li>
+                        @for (int i = 1; i <= paged.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == paged.PageIndex ? "active" : "")">
+                                <form method="get" asp-controller="Customer" asp-action="Index" class="d-inline">
+                                    @* Hidden filter inputs *@
+                                    @foreach (var cat in Model.Filter.Categories ?? Enumerable.Empty<int>())
+                                    {
+                                        <input type="hidden" name="Categories" value="@cat" />
+                                    }
+                                    @foreach (var brand in Model.Filter.Brands ?? Enumerable.Empty<string>())
+                                    {
+                                        <input type="hidden" name="Brands" value="@brand" />
+                                    }
+                                    @foreach (var gender in Model.Filter.Genders ?? Enumerable.Empty<int>())
+                                    {
+                                        <input type="hidden" name="Genders" value="@gender" />
+                                    }
+                                    @foreach (var frameType in Model.Filter.FrameTypes ?? Enumerable.Empty<int>())
+                                    {
+                                        <input type="hidden" name="FrameTypes" value="@frameType" />
+                                    }
+                                    @foreach (var frameColor in Model.Filter.FrameColors ?? Enumerable.Empty<int>())
+                                    {
+                                        <input type="hidden" name="FrameColors" value="@frameColor" />
+                                    }
+                                    @foreach (var lensColor in Model.Filter.LensColors ?? Enumerable.Empty<int>())
+                                    {
+                                        <input type="hidden" name="LensColors" value="@lensColor" />
+                                    }
+                                    @foreach (var uv in Model.Filter.UVProtections ?? Enumerable.Empty<int>())
+                                    {
+                                        <input type="hidden" name="UVProtections" value="@uv" />
+                                    }
+                                    <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSort" />
+                                    <input type="hidden" name="page" value="@i" />
+                                    <button class="page-link" type="submit">@i</button>
+                                </form>
+                            </li>
+                        }
+                        <li class="page-item @(paged.HasNextPage ? "" : "disabled") ">
+                            <form method="get" asp-controller="Customer" asp-action="Index" class="d-inline">
+                                @* Hidden filter inputs *@
+                                @foreach (var cat in Model.Filter.Categories ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="Categories" value="@cat" />
+                                }
+                                @foreach (var brand in Model.Filter.Brands ?? Enumerable.Empty<string>())
+                                {
+                                    <input type="hidden" name="Brands" value="@brand" />
+                                }
+                                @foreach (var gender in Model.Filter.Genders ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="Genders" value="@gender" />
+                                }
+                                @foreach (var frameType in Model.Filter.FrameTypes ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="FrameTypes" value="@frameType" />
+                                }
+                                @foreach (var frameColor in Model.Filter.FrameColors ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="FrameColors" value="@frameColor" />
+                                }
+                                @foreach (var lensColor in Model.Filter.LensColors ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="LensColors" value="@lensColor" />
+                                }
+                                @foreach (var uv in Model.Filter.UVProtections ?? Enumerable.Empty<int>())
+                                {
+                                    <input type="hidden" name="UVProtections" value="@uv" />
+                                }
+                                <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSort" />
+                                <input type="hidden" name="page" value="@(paged.PageIndex + 1)" />
+                                <button class="page-link" type="submit" aria-label="Sledeća">&raquo;</button>
+                            </form>
+                        </li>
+                    </ul>
+                </nav>
+            }
             </div>
         </div>
     </div>

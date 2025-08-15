@@ -80,45 +80,40 @@
                         </tbody>
                         
                     </table>
-                <nav>
-                    <ul class="pagination justify-content-center">
-                        @if (Model.HasPreviousPage)
-                        {
-                            <li class="page-item">
-                                <a class="page-link" asp-action="ManageProducts"
-                                   asp-route-page="@(Model.PageIndex - 1)"
-                                   asp-route-sortOrder="@ViewBag.CurrentSort">
-                                   Prethodna
-                                </a>
+                @if (Model is PaginatedList<Product> paged && paged.TotalPages > 0)
+                {
+                    <nav aria-label="Product pagination">
+                        <ul class="pagination justify-content-center mt-4">
+                            <li class="page-item @(paged.HasPreviousPage ? "" : "disabled")">
+                                <form method="get" asp-controller="Customer" asp-action="Index" class="d-inline">
+                                   
+                                    <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSort" />
+                                    <input type="hidden" name="page" value="@(paged.PageIndex - 1)" />
+                                    <button class="page-link" type="submit" aria-label="Prethodna" tabindex="-1">&laquo;</button>
+                                </form>
                             </li>
-                        }
-                        else
-                        {
-                            <li class="page-item disabled"><span class="page-link">Prethodna</span></li>
-                        }
-
-                        <li class="page-item disabled">
-                            <span class="page-link">
-                                Stranica @Model.PageIndex od @Model.TotalPages
-                            </span>
-                        </li>
-
-                        @if (Model.HasNextPage)
-                        {
-                            <li class="page-item">
-                                <a class="page-link" asp-action="ManageProducts"
-                                   asp-route-page="@(Model.PageIndex + 1)"
-                                   asp-route-sortOrder="@ViewBag.CurrentSort">
-                                    Sledeća
-                                </a>
+                            @for (int i = 1; i <= paged.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == paged.PageIndex ? "active" : "")">
+                                    <form method="get" asp-controller="Customer" asp-action="Index" class="d-inline">
+                                       
+                                        <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSort" />
+                                        <input type="hidden" name="page" value="@i" />
+                                        <button class="page-link" type="submit">@i</button>
+                                    </form>
+                                </li>
+                            }
+                            <li class="page-item @(paged.HasNextPage ? "" : "disabled")">
+                                <form method="get" asp-controller="Customer" asp-action="Index" class="d-inline">
+                                    
+                                    <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSort" />
+                                    <input type="hidden" name="page" value="@(paged.PageIndex + 1)" />
+                                    <button class="page-link" type="submit" aria-label="Sledeća">&raquo;</button>
+                                </form>
                             </li>
-                        }
-                        else
-                        {
-                            <li class="page-item disabled"><span class="page-link">Sledeća</span></li>
-                        }
-                    </ul>
-                </nav>
+                        </ul>
+                    </nav>
+                }
                 </div>
                 
             </div>

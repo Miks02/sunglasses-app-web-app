@@ -31,6 +31,7 @@ namespace SunglassesApp.Data.Repositories.Implementations
         {
             return  _context.Products
                     .Include(p => p.Promotion)
+                    .Include(p => p.Ratings)
                     .AsQueryable();
         }
 
