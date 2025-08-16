@@ -297,8 +297,8 @@
                                             }
                                             else
                                             {
-                                                <span class="price text-decoration-line-through text-danger opacity-0">rar</span>
-                                                <span class="price mt-3">@product.Price RSD</span>
+                                                <span class="price text-decoration-line-through text-danger opacity-0"></span>
+                                                <span class="price mt-3" id="price" value="@product.Price">@product.Price RSD</span>
 
                                             }
                                         }
@@ -310,7 +310,10 @@
                                     @{
                                         if(User.IsInRole("User") && SignInManager.IsSignedIn(User))
                                         {
-                                            <button class="btn cart-btn hover shadow">
+                                            <button class="btn cart-btn hover shadow add-to-cart-btn" 
+                                                    data-product-id="@product.Id" 
+                                                    data-product-name="@product.Name"
+                                                    data-price="@(product.PromoPrice ?? product.Price)">
                                                 <i class="bi bi-cart4"></i>
                                                 Dodaj u korpu
                                             </button>

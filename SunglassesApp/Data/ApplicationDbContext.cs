@@ -22,6 +22,9 @@ namespace SunglassesApp.Data
         public DbSet<SupportTicketMessage> SupportTicketMessages { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -43,8 +46,8 @@ namespace SunglassesApp.Data
             var adminRoleId = "218f1a02-f071-4468-b646-48a24e11e1d8";
             
 
-            var userId = "80c32529-9d23-4d53-a0b3-89c710f5fd96";
-            var adminId = "e1976e68-c98a-46f6-9f1e-c0a87ef94609";
+            var userId = "e0f3556e-bb32-4115-9314-a112ff7bb605";
+            var adminId = "7700ff9b-8646-4813-b20d-ad27d6894c7e";
             
 
             var roles = new List<IdentityRole>
@@ -73,29 +76,29 @@ namespace SunglassesApp.Data
             {
                 FirstName = "FirstName",
                 LastName = "LastName",
-                UserName = "user35",
-                NormalizedUserName = "USER35",
+                UserName = "user_ITS",
+                NormalizedUserName = "USER_ITS",
                 Email = "test@gmail.com",
                 NormalizedEmail = "TEST@GMAIL.COM",
                 EmailConfirmed = true,
                 Id = userId
             };
 
-            user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(user, "Miks_03112002");
+            user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(user, "123456");
 
             var adminUser = new ApplicationUser
             {
                 FirstName = "Admin",
                 LastName = "Admin",
-                UserName = "Admin02",
-                NormalizedUserName = "ADMIN02",
-                Email = "admin02@gmail.com",
-                NormalizedEmail = "ADMIN02@GMAIL.COM",
+                UserName = "Admin_ITS",
+                NormalizedUserName = "ADMIN_ITS",
+                Email = "admin@gmail.com",
+                NormalizedEmail = "ADMIN@GMAIL.COM",
                 EmailConfirmed = true,
                 Id = adminId
             };
 
-            adminUser.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(adminUser, "Miks_03112002");
+            adminUser.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(adminUser, "123456");
 
 
             builder.Entity<ApplicationUser>().HasData(user);

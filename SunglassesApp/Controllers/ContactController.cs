@@ -65,9 +65,10 @@ namespace SunglassesApp.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> UserTickets(string id)
+        public async Task<IActionResult> UserTickets()
         {
-            var tickets = _supportTicketRepository.GetUserTicket(id);
+            var userId = _userManager.GetUserId(User);
+            var tickets = _supportTicketRepository.GetUserTicket(userId!);
 
             var userTickets = await tickets.ToListAsync();
 

@@ -35,6 +35,7 @@ namespace SunglassesApp.Data.Repositories.Implementations
             return _context.SupportTickets
                 .Include(t => t.Sender)
                 .Include(t => t.Messages)
+                .OrderByDescending(t => t.SentAt)
                 .AsQueryable();
         }
 
@@ -43,6 +44,7 @@ namespace SunglassesApp.Data.Repositories.Implementations
             return _context.SupportTickets
                 .Where(s => s.SenderId == userId)
                 .Include(t => t.Messages)
+                .OrderByDescending(t => t.SentAt)
                 .AsQueryable();
         }
 

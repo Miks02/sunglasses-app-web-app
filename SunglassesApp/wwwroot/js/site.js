@@ -1,4 +1,9 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿import { CartController } from "./Controllers/CartController.js";
+import { CartService } from "./Services/CartService.js";
 
-// Write your JavaScript code.
+const cartService = new CartService();
+const cartController = new CartController(cartService);
+
+window.addEventListener("DOMContentLoaded", () => {
+    cartController.init();
+});

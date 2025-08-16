@@ -26,8 +26,9 @@
                     @User.Identity?.Name!
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item " asp-action="Index" asp-controller="Cart">Korpa</a></li>
                     <li><a class="dropdown-item  " href="#">Pregled porudzbina</a></li>
-                    <li><a class="dropdown-item " asp-action="UserTickets" asp-controller="Contact" asp-route-id="@currUserId">Pregled tiketa</a></li>
+                    <li><a class="dropdown-item " asp-action="UserTickets" asp-controller="Contact" >Pregled tiketa</a></li>
                     
                 </ul>
             </div>

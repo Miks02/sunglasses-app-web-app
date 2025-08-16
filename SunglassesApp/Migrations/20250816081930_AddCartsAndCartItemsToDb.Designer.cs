@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SunglassesApp.Data;
 
@@ -11,9 +12,11 @@ using SunglassesApp.Data;
 namespace SunglassesApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250816081930_AddCartsAndCartItemsToDb")]
+    partial class AddCartsAndCartItemsToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,7 +263,7 @@ namespace SunglassesApp.Migrations
                         {
                             Id = "e0f3556e-bb32-4115-9314-a112ff7bb605",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bef1f217-e797-42c7-b296-548493597814",
+                            ConcurrencyStamp = "8fb7bbcb-2f34-4695-86c4-515b5fb6adb0",
                             Email = "test@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "FirstName",
@@ -268,9 +271,9 @@ namespace SunglassesApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST@GMAIL.COM",
                             NormalizedUserName = "USER_ITS",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBI4dmbxdzzmVt910/Mc6MoixBol3Rnwpe4GIOUkJRNJmlrybdDwlpsPQnv4hdY42A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN6QJFenrnZpJjmjSuDjbnQ1AAeVVDADG0BA106LXyYXPDXKnUMFTEQv1Zce+Ztc9Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7c4279fd-2f73-4b1c-a581-64c29ba9d618",
+                            SecurityStamp = "35588080-7e86-49dd-a7db-0ec51e462014",
                             TwoFactorEnabled = false,
                             UserName = "user_ITS"
                         },
@@ -278,7 +281,7 @@ namespace SunglassesApp.Migrations
                         {
                             Id = "7700ff9b-8646-4813-b20d-ad27d6894c7e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5d8373a0-8c5f-4eca-b7e0-5b64f8fdf014",
+                            ConcurrencyStamp = "141e1eab-5116-42e6-9158-07481e49e166",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -286,9 +289,9 @@ namespace SunglassesApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN_ITS",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHelLi2hiGfrgAP5b5y1l5WncuBSUoRXBMKpnV1TzFdFjFfdJsjIEIUncqILaV08Qw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMPGXl3pd/52ojSBPJRT0pfQBwkZCjfa56bWCl7KDXwACB0EHMqqTw1D3W8VNzey4g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "71f18d97-5653-4de4-bd54-299b99849180",
+                            SecurityStamp = "c35f5557-0042-4980-92e8-b3448cb0de83",
                             TwoFactorEnabled = false,
                             UserName = "Admin_ITS"
                         });
@@ -302,7 +305,7 @@ namespace SunglassesApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("SessionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -328,14 +331,16 @@ namespace SunglassesApp.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CartId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("CartItems");
                 });
@@ -664,15 +669,7 @@ namespace SunglassesApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SunglassesApp.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Cart");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SunglassesApp.Models.Comment", b =>

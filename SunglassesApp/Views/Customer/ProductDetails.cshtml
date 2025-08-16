@@ -76,11 +76,22 @@
 
             <div class="mb-4">
                 <label for="quantity" class="form-label">Količina:</label>
-                <input type="number" class="form-control" id="quantity" value="1" min="1" style="width: 80px;">
+                <input type="number" class="form-control" id="quantity" value="@Model.Quantity" min="1" style="width: 80px;">
             </div>
-            <button class="btn btn-primary btn-lg mb-3 me-2">
-                <i class="bi bi-cart-plus"></i> Dodaj u korpu
-            </button>
+        @if(User.IsInRole("User") && SignInManager.IsSignedIn(User))
+        {
+            <button class="btn btn-primary add-to-cart-btn btn-lg mb-3 me-2 shadow"
+                data-product-id="@Model.ProductVm.Id"
+                data-quantity="@Model.Quantity"
+                    data-price="@(Model.ProductVm.PromoPrice ?? Model.ProductVm.Price)"
+                    id="addBtn"
+            >
+                    
+            <i class="bi bi-cart-plus"></i>
+            Dodaj u korpu
+        </button>
+        }
+           
 
             
         </div>
@@ -172,14 +183,7 @@
                                     else
                                     {
                                         <h6 class="mb-0">@c.User.UserName</h6>
-                                    }
-
-                                    
-
-                                        
-                                    
-
-                                   
+                                    }  
 
                                     <span class="comment-time">@c.AddedAt</span>
                                 </div>
