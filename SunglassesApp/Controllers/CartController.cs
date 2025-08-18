@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SunglassesApp.Data.Repositories.Interfaces;
 using SunglassesApp.DataTransferObjects;
 using SunglassesApp.Models;
+using SunglassesApp.ViewModels;
 using System.Threading.Tasks;
 
 namespace SunglassesApp.Controllers
@@ -29,7 +30,12 @@ namespace SunglassesApp.Controllers
         {
             var items = await _cartRepository.GetCart(GetUserId());
 
-            return View(items);
+            var cartVm = new CheckoutViewModel
+            {
+                Cart = items
+            };
+
+            return View(cartVm);
         }
 
         private string GetUserId()
@@ -98,6 +104,8 @@ namespace SunglassesApp.Controllers
 
             }
         }
+
+        
 
         [HttpDelete("clear")]
         public async Task<IActionResult> ClearCart()

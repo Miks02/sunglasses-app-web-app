@@ -1,5 +1,7 @@
 @using SunglassesApp.Models;
-@model Cart
+@using SunglassesApp.ViewModels;
+@using SunglassesApp.Helpers;
+@model CheckoutViewModel;
 @{
     Layout = "_Layout";
 
@@ -7,9 +9,9 @@
     decimal finalPrice = 0;
     decimal delivery = 0;
 
-    if(Model.Items.Count > 0)
+    if(Model.Cart.Items.Count > 0)
     {
-        @foreach(var i in Model.Items)
+        @foreach(var i in Model.Cart.Items)
         {
             for(int j = 0; j < i.Quantity; j++)
             {
@@ -23,13 +25,13 @@
 }
 
 
-<div class="container mt-5">
+<div class="container w-50 mt-3">
     <div class="row">
 
         <div class="col-lg-8">
             <h3 class="text-light">Odabrani artikli</h3>
 
-            @if(Model.Items.Count == 0)
+            @if(Model.Cart.Items.Count == 0)
             {
                 <div class="d-flex align-items-center justify-content-center fs-4 text-dark bg-light text-center rounded-3 shadow fw-bold h-50">
                     Korpa je prazna
@@ -37,7 +39,7 @@
             }
             else
             {
-                @foreach (var i in Model.Items)
+                @foreach (var i in Model.Cart.Items)
                 {
                     <div class="cart-item d-flex justify-content-between bg-light p-3 shadow rounded-3">
                         <div class="d-flex">
@@ -82,7 +84,47 @@
                         <span class="total-price">@finalPrice RSD</span>
                     </li>
                 </ul>
-                <button class="btn btn-checkout w-100">Nastavi na plaćanje</button>
+                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                    Nastavi na plaćanje
+                </button>
+            </div>
+
+           
+            <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="checkoutModalLabel">Unesite podatke za isporuku</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form asp-action="Checkout" asp-controller="Order" method="post">
+                                <input type="hidden" asp-for="Cart" />
+
+                                <div class="mb-3">
+                                    <label asp-for="City" class="form-label">Grad</label>
+                                    <input asp-for="City" class="form-control" />
+                                    <span asp-validation-for="City" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="PostalCode" class="form-label">Poštanski broj</label>
+                                    <input asp-for="PostalCode" class="form-control" />
+                                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="ShippingAddress" class="form-label">Adresa dostave</label>
+                                    <input asp-for="ShippingAddress" class="form-control" />
+                                    <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+                                </div>
+
+                                <button type="submit" class="btn btn-success w-100">Potvrdi porudžbinu</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
     </div>

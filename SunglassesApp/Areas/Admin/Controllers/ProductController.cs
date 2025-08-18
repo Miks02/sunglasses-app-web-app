@@ -35,6 +35,8 @@ namespace SunglassesApp.Controllers
         {
             var products =  _productRepoistory.GetAll();
 
+            products = products.OrderByDescending(p => p.TimesBought).Include(p => p.Ratings);
+
             var productList = await products.ToListAsync();
 
             return View(products);
@@ -173,10 +175,10 @@ namespace SunglassesApp.Controllers
 
             try
             {
-                await _productRepoistory.Update(updatedProduct);
+                await _productRepoistory.Update(updatedProduct, null);
                 await _productRepoistory.Save();
 
-                TempData["SuccessMessage"] = "Proizvod je uspešno ašuriran";
+                TempData["SuccessMessage"] = "Proizvod je uspešno ažuriran";
                 return RedirectToAction("ManageProducts");
             } 
             catch(Exception ex)

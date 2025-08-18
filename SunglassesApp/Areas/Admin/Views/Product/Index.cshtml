@@ -1,7 +1,7 @@
 @model IEnumerable<SunglassesApp.Models.Product>
 @{
     Layout = "_AdminLayout";
-    var productsCount = Model.Count();
+
 }
 
 <h1>Statistika</h1>
@@ -20,9 +20,7 @@
                         <i class="fas fa-users fa-3x"></i>
                     </div>
                     <div class="mt-2">
-                        <span class="badge bg-light text-primary">
-                            <i class="fas fa-arrow-up"></i> 12% u odnosu na prošli mesec
-                        </span>
+                        
                     </div>
                 </div>
             </div>
@@ -35,14 +33,12 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="card-title">BROJ PROIZVODA</h6>
-                            <h2 class="card-text">@productsCount</h2>
+                            <h2 class="card-text">@Model.Count()</h2>
                         </div>
                         <i class="fas fa-glasses fa-3x"></i>
                     </div>
                     <div class="mt-2">
-                        <span class="badge bg-light text-success">
-                            <i class="fas fa-arrow-up"></i> 5 novih proizvoda
-                        </span>
+                       
                     </div>
                 </div>
             </div>
@@ -60,9 +56,7 @@
                         <i class="fas fa-shopping-cart fa-3x"></i>
                     </div>
                     <div class="mt-2">
-                        <span class="badge bg-light text-warning">
-                            <i class="fas fa-arrow-down"></i> 3% manje nego juče
-                        </span>
+                        
                     </div>
                 </div>
             </div>
@@ -95,6 +89,39 @@
                                     <td>@p.Price</td>
                                     <td>@p.TimesBought</td>
                                     <td>0.0</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4 bg-gray shadow ">
+            <div class="card-header  text-center text-light bg-gray">
+
+                <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Brendovi proizvoda po oceni</h5>
+            </div>
+            <div class="card-body">
+
+                <div class="table-responsive  border-top rounded-top">
+
+                    <table class="table table-hover table-secondary ">
+
+                        <thead class="table-dark text-light">
+                            <tr>
+                                <th>Brand</th>
+                                <th>Cena</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var p in Model)
+                            {
+                                <tr>
+                                    <td>@p.Brand</td>
+                                    <td>@p.Price</td>
+                                    
                                 </tr>
                             }
                         </tbody>

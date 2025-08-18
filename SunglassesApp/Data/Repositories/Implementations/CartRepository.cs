@@ -16,12 +16,11 @@ namespace SunglassesApp.Data.Repositories.Implementations
             _context = context;
             _logger = logger;
         }
-
+         
         public async Task<Cart> GetCart(string userId)
         {
             var cart = await _context.Carts
                 .Where(c => c.UserId == userId)
-             
                 .Include(c => c.Items)
                     .ThenInclude(i => i.Product)
                 .FirstOrDefaultAsync();
@@ -54,7 +53,7 @@ namespace SunglassesApp.Data.Repositories.Implementations
             {
                item.CartId = cart.Id;
                await _context.CartItems.AddAsync(item);
-
+               
             }         
 
         }

@@ -46,11 +46,17 @@ namespace SunglassesApp.Data.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(Product product)
+        public async Task Update(Product product, int? timesBought)
         {
     
             var existingProduct = await _context.Products.FindAsync(product.Id);
             if(existingProduct == null) throw new Exception("Proizvod nije pronadjen");
+             
+            if(timesBought != null)
+            {
+                existingProduct.TimesBought += (int)timesBought;
+                return;
+            }
 
             existingProduct.Model = product.Model;
             existingProduct.Brand = product.Brand;
@@ -72,8 +78,6 @@ namespace SunglassesApp.Data.Repositories.Implementations
             }
             else existingProduct.PromoPrice = null;
 
-            
-            
         }
 
         public async Task<IEnumerable<string>> GetBrands()
