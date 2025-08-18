@@ -153,7 +153,51 @@ namespace SunglassesApp.Controllers
 
         }
 
-        
+        [HttpPost]
+        public async Task<IActionResult> ClearOrders()
+        {
+            var orders = await _orderRepository.GetAllUserOrders(GetUserId())
+                .Where(o => o.Status == OrderStatus.Shipped || o.Status == OrderStatus.Cancelled)
+                .ToListAsync();
+
+            if(orders.Count == 0)
+            {
+                TempData["ErrorMessage"] = "Moguće je brisanje samo završenih ili otkazanih porudžbina";
+                return RedirectToAction("UserOrders");
+            }
+
+            try
+            {
+                await _orderRepository.ClearUserOrders(orders);
+                await _orderRepository.Save();
+                TempData["SuccessMessage"] = "Uspešno brisanje istorije porudžbina";
+                return RedirectToAction("UserOrders");
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("GREŠKA! " + ex);
+                TempData["ErrorMessage"] = "DoŠlo je do greške prilikom brisanja istorije porudžbina... Pokušajte ponovo kasnije";
+                return RedirectToAction("UserOrders");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            try
+            {
+                await _orderRepository.DeleteOrder(id);
+                await _orderRepository.Save();
+                TempData["SuccessMessage"] = "Uspešno brisanje porudžbine";
+                return RedirectToAction("UserOrders");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("GREŠKA! " + ex);
+                TempData["ErrorMessage"] = "DoŠlo je do greške prilikom brisanja porudžbine... Pokušajte ponovo kasnije";
+                return RedirectToAction("UserOrders");
+            }
+        }
 
 
     }

@@ -146,6 +146,14 @@
                                         </button>
                                     </form>
                                 }
+                                else if(Model.Status == OrderStatus.Delivered || Model.Status == OrderStatus.Cancelled)
+                                {
+                                    <form asp-action="DeleteOrder" asp-controller="Order" asp-route-id="@Model.Id" method="post">
+                                        <button class="btn btn-danger" type="submit" data-abc="true">
+                                            Obriši porudžbinu
+                                        </button>
+                                    </form>
+                                }
                             }
                         </div>
                     </div>

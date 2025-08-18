@@ -6,12 +6,14 @@ namespace SunglassesApp.Data.Repositories.Interfaces
     {
         Task AddOrder(Order order);
         Task CancelOrder(Order order);
-        public Task<Order?> GetOrderByUserId(string userId, int? id);
-        public IQueryable<Order> GetAllUserOrders(string userId);
+        Task<Order?> GetOrderByUserId(string userId, int? id);
+        IQueryable<Order> GetAllUserOrders(string userId);
+        Task ClearUserOrders(List<Order> orders);
 
-        public Task<Order?> GetOrder(int id);
+        Task DeleteOrder(int id);
+        Task<Order?> GetOrder(int id);
 
-        public IQueryable<Order> GetAll();
+        IQueryable<Order> GetAll();
 
         Task UpdateOrder(Order order, OrderStatus status);
         Task Save();

@@ -24,10 +24,6 @@ namespace SunglassesApp.Data.Repositories.Implementations
 
             if (existingOrder == null) throw new Exception("Porudžbina nije pronadjena!");
 
-
-
-            
-
             existingOrder.Status = OrderStatus.Cancelled;
             
         }
@@ -59,6 +55,12 @@ namespace SunglassesApp.Data.Repositories.Implementations
             return  _context.Orders
                 .Where(o => o.UserId == userId)
                 .AsQueryable();
+        }
+
+        public Task ClearUserOrders(List<Order> orders)
+        {
+            _context.Orders.RemoveRange(orders);
+            return Task.CompletedTask;
         }
 
         public async Task Save()
@@ -96,7 +98,14 @@ namespace SunglassesApp.Data.Repositories.Implementations
                 .AsQueryable();
         }
 
-       
+        public async Task DeleteOrder(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
 
+            if (order == null) throw new Exception("Porudžbina nije pronadjena");
+
+            _context.Orders.Remove(order);
+
+        }
     }
 }
