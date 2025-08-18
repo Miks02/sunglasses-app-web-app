@@ -66,26 +66,34 @@ namespace SunglassesApp.Data.Repositories.Implementations
             await _context.SaveChangesAsync(); 
         }
 
-        public async Task UpdateOrder(Order order)
+        public async Task UpdateOrder(Order order, OrderStatus status)
         {
             var existingOrder = await GetOrder(order.Id);
 
             if (existingOrder == null) throw new Exception("Porudzbina nije pronadjena");
 
-            existingOrder.Status = order.Status;
+            existingOrder.Status = status;
 
-            _context.Orders.Update(existingOrder);
+            
 
         }
 
-        public async Task<Order> GetOrder(int id)
+        public async Task<Order?> GetOrder(int id)
         {
-            return await _context.Orders.FirstAsync(o => o.Id == id);
+            return await _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.Items)
+                .ThenInclude(o => o.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
         }
 
-        public IQueryable<Order> GetAll(int id)
+        public IQueryable<Order> GetAll()
         {
-            return _context.Orders.Where(o => o.Id == id).AsQueryable();
+            return _context.Orders
+                .OrderByDescending(o => o.OrderDate)
+                .Include(o => o.Items)
+                .Include(o => o.User)
+                .AsQueryable();
         }
 
        

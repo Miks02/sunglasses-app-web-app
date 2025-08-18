@@ -2,26 +2,26 @@
 @using SunglassesApp.Helpers;
 @model IEnumerable<Order>;
 @{
-    Layout = "_Layout";
+    Layout = "_AdminLayout";
 }
 
 
-<div class="container my-5 bg-light shadow rounded-3 pb-1 w-75">
-    <h2 class="mb-4 pt-2">📩 Moje porudžbine</h2>
+<div class="container my-5 text-light dark-gradient shadow rounded-3 pb-1 w-100">
+    <h2 class="mb-4 pt-2">📩 Spisak porudžbina</h2>
 
     @if (!Model.Any())
     {
         <div class="alert alert-info">
-            Trenutno nemate nijednu porudžbinu
+            Trenutno nema sačuvanih porudžbina
         </div>
     }
     else
     {
-        <table class="table table-hover shadow-sm">
+        <table class="table table-hover text-light shadow-sm">
             <thead class="table-dark">
-                <tr> 
+                <tr>
                     <th scope="col">#</th>
-                   
+                    <th scope="col">Kupac</th>
                     <th scope="col">Cena porudžbine<meta name="viewport" content="width=device-width" /></th>
                     <th scope="col">Status</th>
                     <th scope="col">Datum poručivanja</th>
@@ -30,8 +30,9 @@
             <tbody>
                 @foreach (var order in Model)
                 {
-                    <tr onclick="window.location.href='@Url.Action("Invoice", "Order", new { id = order.Id })'" style="cursor:pointer;">
+                    <tr onclick="window.location.href='@Url.Action("OrderDetails", "Order", new {Area = "Admin", id = order.Id })'" style="cursor:pointer;">
                         <th scope="row">@order.Id</th>
+                        <th>@order.User.UserName</th>
                         <td>@order.OrderPrice</td>
                         <td>
                             @{
@@ -51,7 +52,7 @@
                                         break;
                                 }
                             }
-                           
+
 
                         </td>
                         <td>@order.OrderDate.ToString("dd.MM.yyyy")</td>

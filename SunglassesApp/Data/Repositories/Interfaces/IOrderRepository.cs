@@ -9,11 +9,11 @@ namespace SunglassesApp.Data.Repositories.Interfaces
         public Task<Order?> GetOrderByUserId(string userId, int? id);
         public IQueryable<Order> GetAllUserOrders(string userId);
 
-        public Task<Order> GetOrder(int id);
+        public Task<Order?> GetOrder(int id);
 
-        public IQueryable<Order> GetAll(int id);
+        public IQueryable<Order> GetAll();
 
-        Task UpdateOrder(Order order);
+        Task UpdateOrder(Order order, OrderStatus status);
         Task Save();
     }
 }

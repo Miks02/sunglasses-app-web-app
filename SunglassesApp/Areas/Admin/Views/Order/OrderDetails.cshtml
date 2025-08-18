@@ -1,0 +1,188 @@
+﻿@using SunglassesApp.Models;
+@using SunglassesApp.Helpers;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model Order;
+@{
+    Layout = "_AdminLayout";
+}
+
+
+<div class="container-fluid  w-75 my-2 ">
+    <div id="ui-view" data-select2-id="ui-view">
+        <div >
+            <div class="dark-gradient rounded-3 shadow text-light">
+                <div class="card-header">
+                    Račun - prikaz detalja porudzbine
+
+                    @* <a class="btn btn-sm btn-secondary float-right mr-1 d-print-none" href="#" onclick="javascript:window.print();" data-abc="true">
+                        <i class="fa fa-print"></i> Print
+                    </a>
+                    <a class="btn btn-sm btn-info float-right mr-1 d-print-none" href="#" data-abc="true">
+                        <i class="fa fa-save"></i> Save
+                    </a> *@
+                </div>
+                <div class="card-body ">
+                    <div class="row mb-4 justify-content-center">
+
+
+                        <div class="col-sm-4 text-light ">
+                            <h6 class="mb-3">Za:</h6>
+                            <div>
+                                <strong>@Model.User.FirstName @Model.User.LastName</strong>
+                            </div>
+                            <div>Adresa: @Model.ShippingAddress</div>
+                            <div>Email: @Model.User.Email</div>
+                            <div>Korisničko ime: @Model.User.UserName</div>
+                            <div>Država: Srbija</div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <h6 class="mb-3">Detalji porudžbine:</h6>
+                            <div>
+                                Broj porudžbine
+                                <strong>@Model.Id</strong>
+                            </div>
+                            <div>Datum porudžbine @Model.OrderDate</div>
+                            <div>Status: @EnumExtensions.GetDisplayName(Model.Status)</div>
+                            <div>Način plaćanja: Pouzećem</div>
+                            <div>
+                                Očekivano vreme isporuke
+                                <strong>2 - 4 dana</strong>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="table-responsive-xl table-responsive-lg ">
+                        <table class="table table-striped text-light">
+                            <thead>
+                                <tr>
+                                    @* <th class="center">#</th> *@
+                                    <th>Slika proizvoda</th>
+                                    <th>Proizvod</th>
+                                    <th>Brend</th>
+                                    <th class="center">Količina</th>
+                                    <th class="right">Cena</th>
+                                    <th class="right">Ukupna cena</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var p in Model.Items)
+                                {
+                                    <tr class="text-light">
+                                        @* <td class="center">1</td> *@
+                                        <td class="left"><img src="@p.Product.ImageUrl" class="product-img" /></td>
+                                        <td class="left">@p.Product.Name</td>
+                                        <td class="left">@p.Product.Brand</td>
+                                        <td class="center">@p.Quantity</td>
+                                        <td class="right">@p.UnitPrice RSD</td>
+                                        <td class="right">@(p.UnitPrice* p.Quantity) RSD</td>
+                                    </tr>
+                                }
+                                @* <tr>
+                                    <td class="center">1</td>
+                                    <td class="left">Iphone 10</td>
+                                    <td class="left">Apple iphoe 10 with extended warranty</td>
+                                    <td class="center">16</td>
+                                    <td class="right">$999,00</td>
+                                    <td class="right">$999,00</td>
+                                </tr>
+                                <tr>
+                                    <td class="center">2</td>
+                                    <td class="left">Samsung S6</td>
+                                    <td class="left">Samsung S6 with extended warranty</td>
+                                    <td class="center">20</td>
+                                    <td class="right">$150,00</td>
+                                    <td class="right">$3.000,00</td>
+                                </tr> *@
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row justify-content-center">
+                        @* <div class="col-lg-4 text-info  fw-bold col-sm-5">Proizvod je moguće otkazati sve dok  je status narudžbine "U obradi"</div> *@
+                        <div class="col-lg-4 col-sm-5 ml-auto">
+                            <table class="table table-clear">
+                                <tbody class="text-light">
+                                    <tr>
+                                        <td class="left text-light">
+                                            <strong>Ukupna cena proizvoda</strong>
+                                        </td>
+                                        <td class="right">@(Model.OrderPrice - 499.99M) RSD</td>
+                                    </tr>
+                                    @* <tr>
+                                        <td class="left">
+                                            <strong>Discount (20%)</strong>
+                                        </td>
+                                        <td class="right">$1,699,40</td>
+                                    </tr> *@
+                                    <tr>
+                                        <td class="left">
+                                            <strong>Dostava</strong>
+                                        </td>
+                                        <td class="right">499.99 RSD</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>Ukupna cena</strong>
+                                        </td>
+                                        <td class="right">
+                                            <strong>@Model.OrderPrice RSD</strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        @if (Model.Status != OrderStatus.Cancelled)
+                        {
+                            <div class="d-flex w-100 justify-content-center">
+
+                                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                                    Promeni status porudžbine
+                                </button>
+                                <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content bg-dark text-light">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title " id="checkoutModalLabel">Promena statusa</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form asp-area="Admin" asp-controller="Order" asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post">
+                                                    <input type="hidden" asp-for="Id" />
+
+                                                    <div class="mb-3 d-flex w-100  flex-column align-items-center">
+                                                        <label class="form-label ">Status porudžbine</label>
+
+                                                        @foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
+                                                        {
+                                                            <div class="form-check">
+                                                                <input class="form-check-input"
+                                                                       type="radio"
+                                                                       name="status"
+                                                                       value="@status"
+                                                                       @(Model.Status == status ? "checked" : "") />
+                                                                <label class="form-check-label ">
+                                                                    @status.GetDisplayName()
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-success w-100">Ažuriraj status</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
