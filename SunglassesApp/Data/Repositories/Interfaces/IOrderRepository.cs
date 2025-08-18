@@ -13,7 +13,8 @@ namespace SunglassesApp.Data.Repositories.Interfaces
         Task DeleteOrder(int id);
         Task<Order?> GetOrder(int id);
 
-        IQueryable<Order> GetAll();
+        IQueryable<Order>? GetAll();
+        int GetOrdersCount();
 
         Task UpdateOrder(Order order, OrderStatus status);
         Task Save();

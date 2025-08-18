@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using SunglassesApp.Helpers;
 using Microsoft.EntityFrameworkCore;
 using AspNetCoreGeneratedDocument;
+using SunglassesApp.DataTransferObjects;
 
 namespace SunglassesApp.Controllers
 {
@@ -21,13 +22,25 @@ namespace SunglassesApp.Controllers
         private readonly IPromotionRepository _promotionRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ILogger<ProductController> _logger;
-        public ProductController(IProductRepository productRepository, IWebHostEnvironment webHostEnvironment, ILogger<ProductController> logger, IPromotionRepository promotionRepository)
+        private readonly IUserRepository _userRepository;
+        private readonly IOrderRepository _orderRepository;
+        public ProductController
+            (
+            IProductRepository productRepository, 
+            IWebHostEnvironment webHostEnvironment,
+            ILogger<ProductController> logger,
+            IPromotionRepository promotionRepository,
+            IUserRepository userRepository,
+            IOrderRepository orderRepository
+            )
 
         {
             _productRepoistory = productRepository;
             _webHostEnvironment = webHostEnvironment;
             _logger = logger;
             _promotionRepository = promotionRepository;
+            _userRepository = userRepository;
+            _orderRepository = orderRepository;
         }
 
         [HttpGet]
@@ -37,9 +50,35 @@ namespace SunglassesApp.Controllers
 
             products = products.OrderByDescending(p => p.TimesBought).Include(p => p.Ratings);
 
+            var usersCount =  _userRepository.GetUsersCount();
+            var ordersCount = _orderRepository.GetOrdersCount();
+           
+
+            List<ProductViewModel> productsVm = new List<ProductViewModel>();
+
+
+            var brands = await products.GroupBy(p => p.Brand)
+            .Select(g => new BrandRatingDTO
+            {
+                Brand = g.Key,
+                AverageRating = g.SelectMany(p => p.Ratings).Any()
+                ? g.SelectMany(p => p.Ratings).Average(r => r.Score) : 0
+            })
+            .OrderByDescending(x => x.AverageRating)
+            .ToListAsync();
+
+
+            var adminVm = new AdminPanelViewModel
+            {
+                products = products,
+                Brands = brands,
+                UserCount = usersCount,
+                OrdersCount = ordersCount
+            };
+
             var productList = await products.ToListAsync();
 
-            return View(products);
+            return View(adminVm);
         }
 
         [HttpGet]

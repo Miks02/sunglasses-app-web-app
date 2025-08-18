@@ -1,4 +1,5 @@
-@model IEnumerable<SunglassesApp.Models.Product>
+@using SunglassesApp.ViewModels
+@model AdminPanelViewModel
 @{
     Layout = "_AdminLayout";
 
@@ -15,7 +16,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="card-title">BROJ KUPACA</h6>
-                            <h2 class="card-text">0</h2>
+                            <h2 class="card-text">@Model.UserCount</h2>
                         </div>
                         <i class="fas fa-users fa-3x"></i>
                     </div>
@@ -33,7 +34,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="card-title">BROJ PROIZVODA</h6>
-                            <h2 class="card-text">@Model.Count()</h2>
+                            <h2 class="card-text">@Model.products.Count()</h2>
                         </div>
                         <i class="fas fa-glasses fa-3x"></i>
                     </div>
@@ -51,7 +52,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="card-title">PORUDŽBINE</h6>
-                            <h2 class="card-text">326</h2>
+                            <h2 class="card-text">@Model.OrdersCount</h2>
                         </div>
                         <i class="fas fa-shopping-cart fa-3x"></i>
                     </div>
@@ -82,7 +83,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach(var p in Model)
+                            @foreach(var p in Model.products)
                             {
                                 <tr>
                                     <td>@p.Name</td>
@@ -101,38 +102,43 @@
                 </div>
             </div>
         </div>
+        <div>
+            <h5 class="mb-0 mt-4 text-center text-light"> Spisak brendova naočara sortiranih po oceni</h5>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-3 mt-4">
+            
 
-        <div class="card mt-4 bg-gray shadow ">
-            <div class="card-header  text-center text-light bg-gray">
-
-                <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Brendovi proizvoda po oceni</h5>
-            </div>
-            <div class="card-body">
-
-                <div class="table-responsive  border-top rounded-top">
-
-                    <table class="table table-hover table-secondary ">
-
-                        <thead class="table-dark text-light">
-                            <tr>
-                                <th>Brand</th>
-                                <th>Cena</th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var p in Model)
-                            {
-                                <tr>
-                                    <td>@p.Brand</td>
-                                    <td>@p.Price</td>
-                                    
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            @{
+                var rank = 1;
+                foreach (var p in Model.Brands)
+                {
+                    <div class="col ">
+                        <div class="card shadow-sm h-100 border-0 rounded-3 text-center ">
+                            <div class="card-body bg-secondary rounded-3 shadow">
+                                <h6 class="card-title fw-bold mb-2">
+                                    <i class="fas fa-trophy text-warning me-1"></i> #@rank
+                                </h6>
+                                <p class="mb-1 fw-bolder fs-5">@p.Brand</p>
+                                <p class="mb-0">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= Math.Round(p.AverageRating))
+                                        {
+                                            <i class="bi bi-star-fill text-warning"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-star-fill"></i>
+                                        }
+                                    }
+                                </p>
+                                <small class="text-warning fw-bolder">(@p.AverageRating.ToString("0.0"))</small>
+                            </div>
+                        </div>
+                    </div>
+                    rank++;
+                }
+            }
         </div>
 
 

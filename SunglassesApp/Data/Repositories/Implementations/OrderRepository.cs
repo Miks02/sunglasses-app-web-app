@@ -89,13 +89,18 @@ namespace SunglassesApp.Data.Repositories.Implementations
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
 
-        public IQueryable<Order> GetAll()
+        public IQueryable<Order>? GetAll()
         {
             return _context.Orders
                 .OrderByDescending(o => o.OrderDate)
                 .Include(o => o.Items)
                 .Include(o => o.User)
                 .AsQueryable();
+        }
+
+        public int GetOrdersCount()
+        {
+            return _context.Orders.Count();
         }
 
         public async Task DeleteOrder(int id)
