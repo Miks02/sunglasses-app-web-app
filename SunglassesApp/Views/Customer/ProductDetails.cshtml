@@ -90,16 +90,45 @@
             <i class="bi bi-cart-plus"></i>
             Dodaj u korpu
         </button>
-        }
-           
 
-            
+         <button type="button" class="btn btn-success  btn-lg mb-3 me-2 shadow"" data-bs-toggle="modal" data-bs-target="#recommendModal">
+                    Preporuči prijatelju
+        </button>
+
+        <div class="modal fade" id="recommendModal" tabindex="-1" aria-labelledby="recommendModal" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="recommendModal">Unesite korisničko ime prijatelja</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form asp-action="Recommend" asp-controller="Recommendation" method="post">
+                                <input type="hidden" name="productId" value="@Model.ProductVm.Id" />
+                                <input type="hidden" name="brand" value="@Model.ProductVm.Brand" />
+                                <input type="hidden" name="model" value="@Model.ProductVm.Model" />
+
+                                <div class="mb-3">
+                                    <label asp-for="UserName" class="form-label">Korisničko ime</label>
+                                    <input asp-for="UserName" class="form-control" />
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                    @if (TempData["ErrorMessage"] != null) 
+                                    {
+                                        <span class="text-danger">@TempData["ErrorMessage"]</span>
+                                       
+                                    }
+                                </div>
+
+                                <button type="submit" class="btn btn-success w-100">Pošalji preporuku</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+         
         </div>
         
-            
-       
-        
-
         <div class="container">
             <div class="comment-section">
                 <h2 class="text-warning fw-bolder text-center ">Komentari kupaca</h2>
@@ -223,6 +252,22 @@
         </div>
 
     </div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center fixed-top alert-dismissible mt-3 fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      
+        var myModal = new bootstrap.Modal(document.getElementById('recommendModal'));
+        myModal.show();
+    </script>
+}
 
 <script>
     document.querySelectorAll('.star-rating label').forEach(function(label) {

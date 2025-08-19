@@ -126,7 +126,7 @@ namespace SunglassesApp.Controllers
         [HttpGet]
         public async Task<IActionResult> EditProduct(int id)
         {
-            _logger.LogInformation("Funkcija je ispaljena");
+           
             var product = await _productRepoistory.Get(id);
             if (product != null)
             {

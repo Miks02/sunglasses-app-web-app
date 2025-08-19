@@ -21,5 +21,13 @@ namespace SunglassesApp.Data.Repositories.Implementations
             .Count();
             return usersCount;
         }
+
+        public async Task<ApplicationUser?> GetUserByUserName(string userName)
+        {
+           return await _context.Users
+                .Where(u => u.UserName == userName)
+                .FirstOrDefaultAsync();
+        }
+
     }
 }

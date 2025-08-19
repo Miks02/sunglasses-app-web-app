@@ -1,0 +1,68 @@
+﻿@using SunglassesApp.Models;
+@using SunglassesApp.Helpers;
+@using SunglassesApp.ViewModels
+@model IEnumerable<Message>;
+@{
+    Layout = "_Layout";
+}
+
+
+<div class="container my-5 bg-light shadow rounded-3 pb-1 w-75">
+    <div class="w-100 d-flex justify-content-between p-2">
+        <h2 class="mb-4 pt-2">📩 Moje preporuke</h2>
+        @if (Model.Any())
+        {
+            <form asp-controller="Recommendation" asp-action="ClearMessages">
+                <button type="submit" class="btn btn-danger p-1 h-50 mt-3 shadow">Obriši preporuke</button>
+            </form>
+        }
+    </div>
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Trenutno nemate nijednu preporuku
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+
+                    <th scope="col">Poruka<meta name="viewport" content="width=device-width" /></th>
+                 
+                    <th scope="col">Datum dospeća</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr onclick="window.location.href='@Url.Action("ProductDetails", "Customer", new { id = r.ProductId })'" style="cursor:pointer;">
+                        <th scope="row">@r.Id</th>
+                        <td>@r.Content</td>
+                        
+                        <td>@r.SentAt.ToString("dd.MM.yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    }
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center fixed-top alert-dismissible mt-3 fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger text-center fixed-top alert-dismissible mt-3 fade show">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+

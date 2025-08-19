@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SunglassesApp.Data;
 
@@ -11,9 +12,11 @@ using SunglassesApp.Data;
 namespace SunglassesApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250818134246_AddMesagesToDb")]
+    partial class AddMesagesToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -260,7 +263,7 @@ namespace SunglassesApp.Migrations
                         {
                             Id = "e0f3556e-bb32-4115-9314-a112ff7bb605",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "722978f0-65e3-4fb2-a7dd-540e8ddc1572",
+                            ConcurrencyStamp = "7abdd0d2-5cac-4562-9cb7-addc9ed36479",
                             Email = "test@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "FirstName",
@@ -268,9 +271,9 @@ namespace SunglassesApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TEST@GMAIL.COM",
                             NormalizedUserName = "USER_ITS",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFxlbERG98mYe9Xghaj0YWcbTzFaUJspwIX96OyAPik5XpQhNwXBabYqDZVr8wY9Dw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIZ1FdPLC+O3W4A/ZdOOfNbsGbyZV3iIgy/1dRt6cnUA5Oqw0bleQGnnAwoL/17uxQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d768abc8-31f3-47d6-a252-23f0441469c5",
+                            SecurityStamp = "a4db6045-1a00-48a2-92b2-850b262bc3ee",
                             TwoFactorEnabled = false,
                             UserName = "user_ITS"
                         },
@@ -278,7 +281,7 @@ namespace SunglassesApp.Migrations
                         {
                             Id = "7700ff9b-8646-4813-b20d-ad27d6894c7e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8f2216e8-7e8a-4aa3-939b-01f7ccabe0bd",
+                            ConcurrencyStamp = "e2cba44a-3e19-4f88-bbab-1ebccbd2f1c0",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -286,9 +289,9 @@ namespace SunglassesApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN_ITS",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPc3ZxYbdVWWZstdiWDkekUCt8D+CX/aS5R3bjwVreYOfFMvFupIw1RTSocXWGnPrw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPbxL7avz92Q1SgprfyxXbDHX1TVsEzelAu4qEkKACKqjwteoMeKfg7FtkWu3ktxxA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4c045774-c9bf-49ec-ac2e-1def458cdf4d",
+                            SecurityStamp = "48ed5da9-2941-4332-bd9b-9ea92ad1798f",
                             TwoFactorEnabled = false,
                             UserName = "Admin_ITS"
                         });
@@ -382,9 +385,6 @@ namespace SunglassesApp.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
 
                     b.Property<string>("RecieverId")
                         .IsRequired()
