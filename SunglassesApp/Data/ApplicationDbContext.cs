@@ -75,39 +75,6 @@ namespace SunglassesApp.Data
 
             builder.Entity<IdentityRole>().HasData(roles);
 
-            var user = new ApplicationUser
-            {
-                FirstName = "FirstName",
-                LastName = "LastName",
-                UserName = "user_ITS",
-                NormalizedUserName = "USER_ITS",
-                Email = "test@gmail.com",
-                NormalizedEmail = "TEST@GMAIL.COM",
-                EmailConfirmed = true,
-                Id = userId
-            };
-
-            user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(user, "123456");
-
-            var adminUser = new ApplicationUser
-            {
-                FirstName = "Admin",
-                LastName = "Admin",
-                UserName = "Admin_ITS",
-                NormalizedUserName = "ADMIN_ITS",
-                Email = "admin@gmail.com",
-                NormalizedEmail = "ADMIN@GMAIL.COM",
-                EmailConfirmed = true,
-                Id = adminId
-            };
-
-            adminUser.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(adminUser, "123456");
-
-
-            builder.Entity<ApplicationUser>().HasData(user);
-            builder.Entity<ApplicationUser>().HasData(adminUser);
-
-           
 
             var userRoles = new List<IdentityUserRole<string>>
              {

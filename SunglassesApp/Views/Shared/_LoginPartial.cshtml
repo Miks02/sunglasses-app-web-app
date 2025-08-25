@@ -16,7 +16,7 @@
         @if (User.IsInRole("Admin"))
         {
             <li class="nav-item">
-                <a class="nav-link text-light" asp-area="Admin" asp-controller="Product" asp-action="Index" title="Manage">Pozdrav @User.Identity?.Name!</a>
+                <a class="nav-link text-light" asp-area="Admin" asp-controller="Product" asp-action="Index" title="Manage">Admin Panel</a>
             </li>
         }
         else
@@ -37,7 +37,7 @@
 
     <li class="nav-item">
         <form  class="form-inline" asp-controller="Account" asp-action="Logout">
-            <button  type="submit" class="nav-link btn btn-link text-light">Odjava</button>
+            <button  type="submit" class="nav-link btn btn-link text-danger fw-bold">Odjava</button>
         </form>
     </li>
 }

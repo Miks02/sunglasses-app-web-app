@@ -40,7 +40,7 @@
                 {
                     <tr onclick="window.location.href='@Url.Action("ProductDetails", "Customer", new { id = r.ProductId })'" style="cursor:pointer;">
                         <th scope="row">@r.Id</th>
-                        <td>@r.Content</td>
+                        <td>@r.MessageContent</td>
                         
                         <td>@r.SentAt.ToString("dd.MM.yyyy")</td>
                     </tr>

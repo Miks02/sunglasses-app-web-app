@@ -8,14 +8,7 @@
     <div class="heading text-center">
         <h1 >Prodavnica sunčanih naočara</h1>  
         <h4>Sunčane naočare za svaku priliku</h4>
-        @if(User.IsInRole("Admin"))
-        {
-            <h4>Admin</h4>
-        }
-        else if(User.IsInRole("User")) {
-            <h4>Korisnik</h4>
-            
-        }
+       
     </div>
     <div class="button-wrapper">
         <a asp-action="Index" asp-controller="Customer" class="btn text-white p-3 bg-body shadow rounded-pill btn-hover ">Katalog</a>

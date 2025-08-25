@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SunglassesApp.Data;
 
@@ -11,13 +12,15 @@ using SunglassesApp.Data;
 namespace SunglassesApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250824232002_AlterMessageTable1")]
+    partial class AlterMessageTable1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -254,6 +257,44 @@ namespace SunglassesApp.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "e0f3556e-bb32-4115-9314-a112ff7bb605",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "91f2d31d-3616-4575-93e1-1b5c436ac290",
+                            Email = "test@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "FirstName",
+                            LastName = "LastName",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "TEST@GMAIL.COM",
+                            NormalizedUserName = "USER_ITS",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKzuj1mxbQkvfef6zeQyhiyucNA2sOG7NEHmeAfPR0Ne6/3AN2sCHyDkluBqu4Dc7g==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "f478a1a0-4ccc-4683-b406-e992fc20f00c",
+                            TwoFactorEnabled = false,
+                            UserName = "user_ITS"
+                        },
+                        new
+                        {
+                            Id = "7700ff9b-8646-4813-b20d-ad27d6894c7e",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "11a529e6-5635-41db-9e17-023c9f5b73a9",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Admin",
+                            LastName = "Admin",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN_ITS",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKLH4xwzmJxK1vsxhFlwBGmEQqPChzoApdvVlGy73Q4ssOyi6ZjT7ASNnB3oBO6F5Q==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "01c6d259-5788-46aa-a02a-d4bd096d9c40",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin_ITS"
+                        });
                 });
 
             modelBuilder.Entity("SunglassesApp.Models.Cart", b =>

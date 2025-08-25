@@ -7,7 +7,7 @@ namespace SunglassesApp.ViewModels
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Unesite komentar")]
         public string Content { get; set; } = null!;
 
         public DateTime AddedAt { get; set; }

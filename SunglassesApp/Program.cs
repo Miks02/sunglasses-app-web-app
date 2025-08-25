@@ -54,4 +54,52 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+await SeedDataAsync(app.Services);
+
+
 app.Run();
+
+static async Task SeedDataAsync(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+    string[] roleNames = { "Admin", "User" };
+    foreach (var roleName in roleNames)
+    {
+        if (!await roleManager.RoleExistsAsync(roleName))
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+    }
+
+    var adminEmail = "admin@gmail.com";
+    if (await userManager.FindByEmailAsync(adminEmail) == null)
+    {
+        var adminUser = new ApplicationUser
+        {
+            UserName = "Admin",
+            Email = adminEmail,
+            FirstName = "Admin",
+            LastName = "Admin",
+            EmailConfirmed = true
+        };
+        await userManager.CreateAsync(adminUser, "123456");
+        await userManager.AddToRoleAsync(adminUser, "Admin");
+    }
+
+    var userEmail = "user@gmail.com";
+    if (await userManager.FindByEmailAsync(userEmail) == null)
+    {
+        var normalUser = new ApplicationUser
+        {
+            UserName = "user",
+            Email = userEmail,
+            FirstName = "FirstName",
+            LastName = "LastName",
+            EmailConfirmed = true
+        };
+        await userManager.CreateAsync(normalUser, "123456");
+        await userManager.AddToRoleAsync(normalUser, "User");
+    }
+}
+

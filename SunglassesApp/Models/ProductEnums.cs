@@ -68,7 +68,9 @@ namespace SunglassesApp.Models
         [Display(Name = "Muške")]
         Male,
         [Display(Name = "Ženske")]
-        Female
+        Female,
+        [Display(Name = "Unisex")]
+        Unisex
     }
 
     public enum Category

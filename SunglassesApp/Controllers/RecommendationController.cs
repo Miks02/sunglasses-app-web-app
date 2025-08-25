@@ -76,7 +76,7 @@ namespace SunglassesApp.Controllers
                 {
                     SenderId = userId,
                     RecieverId = reciever.Id,
-                    Content = $"{user.UserName} vam preporučuje proizvod: {brand} {model}",
+                    MessageContent = $"{user.UserName} vam preporučuje proizvod: {brand} {model}",
                     ProductId = productId,
                 };
 

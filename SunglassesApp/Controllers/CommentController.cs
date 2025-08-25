@@ -38,14 +38,14 @@ namespace SunglassesApp.Controllers
             ModelState.Remove("ProductVm.UVProtection");
             ModelState.Remove("ProductVm.Gender");
             ModelState.Remove("ProductVm.Brand");
+            ModelState.Remove("UserName");
             if (!ModelState.IsValid)
             {
-                TempData["ErrorMessage"] = "Unesite komentar";
+                TempData["CommentErrorMessage"] = "Unesite komentar";
                 Helper.LogModelErrors(ModelState, _logger, "");
                 _logger.LogInformation("ID proizvoda: " + user);
                 return RedirectToAction("ProductDetails", "Customer", new { viewModel.ProductVm!.Id });
             }
-
 
             var comment = new Comment
             {
@@ -68,7 +68,7 @@ namespace SunglassesApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError("Greška: " + ex);
-                TempData["ErrorMessage"] = "Došlo je do greške prilikom dodavanja komentara, pokušajte ponovo";
+                TempData["CommentErrorMessage"] = "Došlo je do greške prilikom dodavanja komentara, pokušajte ponovo";
                 return RedirectToAction("ProductDetails", "Customer", new { id = viewModel.ProductVm.Id });
 
             }
