@@ -127,6 +127,18 @@
             </div>
         }
          
+        <div class="d-flex flex-column">
+            <h4>Specifikacije</h4>
+            <span>Brend: @Model.ProductVm.Brand</span>
+            <span>Model: @Model.ProductVm.Model</span>
+            <span>Tip okvira: @Model.ProductVm.FrameType!.GetDisplayName()</span>
+            <span>Boja okvira: @Model.ProductVm.FrameColor!.GetDisplayName()</span>
+            <span>Boja stakala: @Model.ProductVm.LensColor!.GetDisplayName()</span>
+            <span>Pol: @Model.ProductVm.Gender!.GetDisplayName()</span>
+            <span>Kategorija: @Model.ProductVm.Category!.GetDisplayName()</span>
+            <span>UV zaštita: @Model.ProductVm.UVProtection!.GetDisplayName()</span>
+        </div>
+
         </div>
         
         <div class="container">

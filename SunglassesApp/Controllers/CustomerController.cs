@@ -123,8 +123,6 @@ namespace SunglassesApp.Controllers
             float averageRating = ratings.Any() ? ratings.Average(r => r.Score) : 0;
 
 
-
-
             if (product == null) return View("Index");
 
             var productVm = new ProductViewModel

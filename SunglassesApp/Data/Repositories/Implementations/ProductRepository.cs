@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SunglassesApp.Data.Repositories.Interfaces;
 using SunglassesApp.Models;
+using System.Xml.XPath;
 
 namespace SunglassesApp.Data.Repositories.Implementations
 {
@@ -80,6 +81,8 @@ namespace SunglassesApp.Data.Repositories.Implementations
 
         }
 
+        
+
         public async Task<IEnumerable<string>> GetBrands()
         {
             return await _context.Products.Select(p => p.Brand).Distinct().ToListAsync();
@@ -90,9 +93,12 @@ namespace SunglassesApp.Data.Repositories.Implementations
 
             await _context.Products
                 .Where(p => p.PromotionId == id)
-                .ExecuteUpdateAsync(p => p.SetProperty(x => x.PromotionId, (int?)null));
+                .ExecuteUpdateAsync(p => p
+                    .SetProperty(x => x.PromotionId, (int?)null)
+                    .SetProperty(x => x.PromoPrice, (int?)null)
+                );
 
-       
+
         }
     }
 }

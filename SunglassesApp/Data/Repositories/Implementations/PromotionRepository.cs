@@ -54,15 +54,31 @@ namespace SunglassesApp.Data.Repositories.Implementations
             if (existingPromotion == null)
                 throw new KeyNotFoundException($"Promocija sa unetim ID-em {item.Id} nije pronadjena");
 
+            
+
             existingPromotion.Name = item.Name;
             existingPromotion.DiscountPercentage = item.DiscountPercentage;
             existingPromotion.StartDate = item.StartDate;
             existingPromotion.EndDate = item.EndDate;
 
-            
-            
+            await UpdatePromoPrice(item.Id, item.DiscountPercentage);
+
+            await Save();
         }
 
-        
+        public async Task UpdatePromoPrice(int id, int? discountPercentage)
+        {
+
+            var promo = await Get(id);
+
+            await _context.Products
+            .Where(p => p.PromotionId == id)
+            .ExecuteUpdateAsync(p => p
+                .SetProperty(x => x.PromoPrice, x => x.Price - (x.Price * discountPercentage!.Value / 100))
+            );
+
+        }
+
+
     }
 }
