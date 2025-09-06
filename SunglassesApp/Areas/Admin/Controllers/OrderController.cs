@@ -11,11 +11,10 @@ namespace SunglassesApp.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class OrderController : Controller
     {
-        private ICartRepository _cartRepository;
-        private IProductRepository _productRepository;
+
         private IOrderRepository _orderRepository;
         private ILogger<OrderController> _logger;
-        private UserManager<ApplicationUser> _userManager;
+ 
 
 
         public OrderController
@@ -27,11 +26,10 @@ namespace SunglassesApp.Areas.Admin.Controllers
             UserManager<ApplicationUser> userManager
             )
         {
-            _cartRepository = cartRepository;
-            _productRepository = productRepository;
+        
             _orderRepository = orderRepository;
             _logger = logger;
-            _userManager = userManager;
+      
         }
 
         

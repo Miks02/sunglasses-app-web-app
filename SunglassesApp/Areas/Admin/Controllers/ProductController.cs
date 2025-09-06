@@ -48,7 +48,7 @@ namespace SunglassesApp.Controllers
         {
             var products =  _productRepoistory.GetAll();
 
-            products = products.OrderByDescending(p => p.TimesBought).Include(p => p.Ratings);
+            products = products.OrderByDescending(p => p.TimesBought).Include(p => p.Ratings).Take(5);
 
             var usersCount =  _userRepository.GetUsersCount();
             var ordersCount = _orderRepository.GetOrdersCount();

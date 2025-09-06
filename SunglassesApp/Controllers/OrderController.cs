@@ -75,7 +75,7 @@ namespace SunglassesApp.Controllers
                 };
                 timesBought += orderItem.Quantity;
                 orderPrice = orderItem.Quantity * orderItem.UnitPrice + orderPrice;
-               // _logger.LogInformation("TIMES BOUGHT: " + orderPrice);
+                _logger.LogInformation("TIMES BOUGHT: " + orderPrice);
                 await _productRepository.Update(product!, timesBought);
                 order.Items.Add(orderItem);
             }
@@ -102,13 +102,6 @@ namespace SunglassesApp.Controllers
         public async Task<IActionResult> Invoice(int? id)
         {
             var order = await _orderRepository.GetOrderByUserId(GetUserId(), id);
-
-
-            //if (id != null)
-            //{
-            //    order = await _orderRepository.GetOrderByUserId(GetUserId(), id);
-            //}
-
 
 
             if (order == null) throw new Exception("Porudzbina nije pronadjena");
@@ -157,7 +150,7 @@ namespace SunglassesApp.Controllers
         public async Task<IActionResult> ClearOrders()
         {
             var orders = await _orderRepository.GetAllUserOrders(GetUserId())
-                .Where(o => o.Status == OrderStatus.Shipped || o.Status == OrderStatus.Cancelled)
+                .Where(o => o.Status == OrderStatus.Delivered || o.Status == OrderStatus.Cancelled)
                 .ToListAsync();
 
             if(orders.Count == 0)

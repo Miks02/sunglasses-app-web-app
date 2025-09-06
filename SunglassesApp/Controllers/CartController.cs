@@ -71,21 +71,6 @@ namespace SunglassesApp.Controllers
             }
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetCart()
-        //{
-        //    var userId = GetUserId();
-        //    try
-        //    {
-        //        var cart = await _cartRepository.GetCart(userId);
-        //        return Ok(cart);
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        _logger.LogError("GREŠKA PRILIKOM DOBIJANJA KORPE" + ex);
-        //        return BadRequest(ex);
-        //    }
-        //}
 
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(int id)
