@@ -91,7 +91,7 @@ namespace SunglassesApp.Controllers
 
             ViewBag.ProductBrands = productBrands;
 
-            int pageSize = 6;
+            int pageSize = 15;
 
             var paginatedProducts = PaginatedList<Product>.CreateAsync(products, page, pageSize);
             var vm = new CatalogueViewModel
