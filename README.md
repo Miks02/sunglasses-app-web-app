@@ -41,7 +41,7 @@ The goal of the system is to support a product catalog, simulated purchases, and
 
 ## Tech Stack
 - **Backend:** ASP.NET Core MVC (.NET 8)
-- ""Frontend:"" Javascript, scss, bootstrap
+- **Frontend:**" Javascript, scss, bootstrap
 - **ORM:** Entity Framework Core 9  
 - **Database:** MS SQL Server  
 - **Architecture:** Repository Pattern + layered separation of concerns  
